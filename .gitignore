@@ -1,0 +1,10 @@
+*.exe
+*.app
+*.blend1
+*.ppm
+*.obj
+*.mtl
+.DS_Store
+*.xcf
+/wasm/build/
+/tmp/

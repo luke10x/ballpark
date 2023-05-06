@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.js": "javascript",
+    "stdlib.h": "c",
+    "stdio.h": "c",
+    "ppm.h": "c",
+    "camera.h": "c",
+    "texture.h": "c"
+  }
+}
