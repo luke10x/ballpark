@@ -250,6 +250,10 @@ void ctx_perform_one_cycle(ctx_t* ctx) {
     // Reset the frame counter and update the last FPS print time
     frames_rendered = 0;
     last_fps_print_time = current_time;
+
+    // This makes OpenGL to adjust to window side changes
+    // (More important for web as desktop somehow already handles it)
+    ctx_resize_framebuffer_to_window(ctx);
   }
   
   // Handle input, advance state, and render the scene

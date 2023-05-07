@@ -78,14 +78,12 @@ void camera_matrix(
 void camera_inputs(camera_t* self, GLFWwindow* window) {
 	// Handles key inputs
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-    // glm_vec3_scale(self->Position, self->speed);
     vec3 tempVec;
     glm_vec3_scale(self->Orientation, self->speed, tempVec); // multiply Orientation vector by speed and store in a temporary vector
     glm_vec3_add(self->Position, tempVec, self->Position); // add the result to the Position vector
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		// Position += speed * -glm::normalize(glm::cross(Orientation, Up));
     vec3 temp1, temp2, result;
 
     // Compute the cross product between Orientation and Up vectors
@@ -107,7 +105,6 @@ void camera_inputs(camera_t* self, GLFWwindow* window) {
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		// Position += speed * glm::normalize(glm::cross(Orientation, Up));
     vec3 temp1, temp2, result;
 
     // Compute the cross product between Orientation and Up vectors
@@ -124,7 +121,6 @@ void camera_inputs(camera_t* self, GLFWwindow* window) {
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		// Position += speed * Up;
     vec3 direction;
     glm_cross(self->Position, self->Up, direction);
     vec3 movement;
@@ -133,7 +129,6 @@ void camera_inputs(camera_t* self, GLFWwindow* window) {
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		// Position += speed * -Up;
     glm_vec3_scale(self->Up, -1.0f, self->Up);
     glm_vec3_scale(self->Up, self->speed, self->Up);
     glm_vec3_add(self->Position, self->Up, self->Position);
@@ -181,7 +176,6 @@ void camera_inputs(camera_t* self, GLFWwindow* window) {
     float angle = glm_vec3_angle(normalized, self->Up);
 		// Decides whether or not the next vertical Orientation is legal or not
 		if (fabsf(angle - glm_rad(90.0f)) <= glm_rad(85.0f)) {
-      printf("does it ever go here\n");
       glm_vec3_copy(orientation_copy, self->Orientation);
 		}
 
