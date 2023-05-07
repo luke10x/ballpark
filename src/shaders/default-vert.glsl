@@ -2,7 +2,7 @@
 
 precision mediump float;
 
-in vec4 aPos;
+in vec3 aPos;
 in vec3 aColor;
 in vec2 aTex;
 in vec3 aNormal;
@@ -16,8 +16,8 @@ uniform mat4 camMatrix;
 uniform mat4 model;
 
 void main() {
-   crntPos = vec3(model * vec4(aPos.rgb, 1));
-   gl_Position = camMatrix * vec4(crntPos.rgb, 1);
+   crntPos = vec3(model * vec4(aPos, 1.0f));
+   gl_Position = camMatrix * vec4(crntPos, 1.0f);
 
    color = aColor;
    texCoord = aTex;
