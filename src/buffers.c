@@ -1,27 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#include<GLFW/glfw3.h>
-#endif
-
-#ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <emscripten.h>
-#endif
-
-/*
- * An Element Buffer Object (EBO) is a buffer
- * that stores indices for indexed rendering.
- * Instead of duplicating vertex data for each triangle,
- * a list of indices is used to specify which vertices to use.
- * This can save memory and improve performance in certain cases.
- */
-typedef struct {
-  GLuint ID;
-} ebo_t;
+#include "buffers.h"
 
 ebo_t* ebo_create(GLuint* indices, GLsizeiptr size) {
   ebo_t* self = malloc(sizeof(ebo_t));
@@ -44,17 +24,6 @@ void ebo_delete(ebo_t* self) {
   free(self);
 }
 
-/*
- * A Vertex Buffer Object (VBO) is a buffer
- * that stores vertex data such as vertex positions,
- * normals, texture coordinates, and other per-vertex data.
- * VBOs are used to transfer large amounts of vertex data
- * to the GPU efficiently.
- */
-typedef struct {
-  GLuint ID;
-} vbo_t;
-
 vbo_t* vbo_create(GLfloat* vertices, GLsizeiptr size) {
   vbo_t* self = malloc(sizeof(vbo_t));
   glGenBuffers(1, &(self->ID));
@@ -75,17 +44,6 @@ void vbo_delete(vbo_t* self) {
   // glDeleteBuffers(1, self->ID);
   free(self);
 }
-
-/*
- * A Vertex Array Object (VAO) is an object
- * that encapsulates all the state needed to specify
- * how to access vertex data in a buffer object.
- * It specifies the format of the vertex data
- * and how to read it from the Vertex Buffer Objects (VBOs).
- */
-typedef struct {
-  GLuint ID;
-} vao_t;
 
 vao_t* vao_create() {
   vao_t* self = malloc(sizeof(vao_t));

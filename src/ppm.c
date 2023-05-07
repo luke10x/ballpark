@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "ppm.h"
-
 
 void ppm_load(const char* file_basename, ppm_t** result, int flip) {
   const char* directory_path = "./assets/ppm/";

@@ -51,8 +51,6 @@ char* _get_file_contents(const char *filename) {
   char version[8] = "330 core";
 #endif
   memcpy(&buffer[9], version, 8);
-  printf("SHADER💜 %s\n", buffer);
-
 
   return buffer;
 }
@@ -141,9 +139,9 @@ shader_t* shader_create(const char* vertex_file, const char* fragment_file) {
   char* fragment_source = _get_file_contents(fragment_file);
 
   // load vertex and fragment shaders
-  fprintf(stdout, "Compiling Shader:\n%s\n", vertex_file);
+  fprintf(stdout, "Compiling vertex shader: %s\n", vertex_file);
   GLuint vertexShader   = _loadShader(GL_VERTEX_SHADER, vertex_source);
-  fprintf(stdout, "Compiling shader:\n%s\n", fragment_file);
+  fprintf(stdout, "Compiling fragment shader: %s\n", fragment_file);
   GLuint fragmentShader = _loadShader(GL_FRAGMENT_SHADER, fragment_source);
 
   shader_t* self = malloc(sizeof(shader_t));

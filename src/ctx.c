@@ -15,20 +15,12 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-
-#include "ctx_init.c"
-#include "buffers.c"
-#include "shader.c"
-#include "texture.c"
-#include "ppm.c"
-
+#include "buffers.h"
 #include "ppm.h"
 #include "camera.h"
 #include "texture.h"
 
-
-#define CTX_STATE_NORMAL  0
-#define CTX_STATE_EXITING 1
+#include "ctx_init.c"
 
 typedef struct {
   int should_continue;

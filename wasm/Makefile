@@ -5,7 +5,9 @@
 build:
 	mkdir -p ./build
 
-	emcc ../src/esport.c \
+	emcc \
+		../src/buffers.c ../src/ppm.c \
+		../src/texture.c ../src/shader.c ../src/esport.c \
 		-o ./build/index.html \
 		-s FULL_ES2=1 -s USE_GLFW=3 -s USE_WEBGL2=1 -O0 \
 		-s ALLOW_MEMORY_GROWTH=1 -s GL_UNSAFE_OPTS=0 \
