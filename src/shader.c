@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
@@ -41,6 +42,18 @@ char* _get_file_contents(const char *filename) {
 
   buffer[file_size] = '\0';
   fclose(fp);
+
+// There is $VERSION placeholder in the file,
+// at position 9.
+#ifdef __EMSCRIPTEN__
+  char version[8] = "300 es  ";
+#else
+  char version[8] = "330 core";
+#endif
+  memcpy(&buffer[9], version, 8);
+  printf("SHADER💜 %s\n", buffer);
+
+
   return buffer;
 }
 

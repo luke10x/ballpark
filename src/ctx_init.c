@@ -14,28 +14,20 @@ void ctx_init_video() {
     return;
   }
 
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-#ifdef __EMSCRIPTEN__
   glfwDefaultWindowHints();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 4); // enable multisampling
-#endif
 }
 
 GLFWwindow* ctx_init_window(int width, int height) {
 
-  GLFWwindow* window = glfwCreateWindow(width, height, "YoutOpenGL", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(width, height, "Esports Ballpark", NULL, NULL);
 
-	if (window == NULL)
-	{
+	if (window == NULL) {
 		fprintf(stderr, "Failed to create GLFW window\n");
 		glfwTerminate();
 		return NULL;

@@ -1,4 +1,4 @@
-#version 300 es
+#version $VERSION
 
 precision mediump float;
 out vec4 fragColor;

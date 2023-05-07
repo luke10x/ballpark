@@ -1,9 +1,10 @@
-#version 100
+#version $VERSION
 
 precision mediump float;
+out vec4 fragColor;
 
 uniform vec4 lightColor;
 
 void main() {
-    gl_FragColor = lightColor;
+    fragColor = lightColor;
 }

@@ -21,3 +21,15 @@ Simply run the following command in your terminal:
     docker-compose run wasm 'make clean build'
 
 Web application files will be genrated in `./wasm/build/`.
+
+## Native building on Mac
+
+Libraries need to be installed:
+
+    brew install glfw
+    brew install glew
+    brew install cglm
+
+Then compile desktop application with:
+
+    make clean esport.app
