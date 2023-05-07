@@ -1,16 +1,16 @@
-#version 100
+#version 300 es
 
 precision mediump float;
 
-attribute vec4 aPos;
-attribute vec3 aColor;
-attribute vec2 aTex;
-attribute vec3 aNormal;
+in vec4 aPos;
+in vec3 aColor;
+in vec2 aTex;
+in vec3 aNormal;
 
-varying vec3 color;
-varying vec2 texCoord;
-varying vec3 Normal;
-varying vec3 crntPos;
+out vec3 color;
+out vec2 texCoord;
+out vec3 Normal;
+out vec3 crntPos;
 
 uniform mat4 camMatrix;
 uniform mat4 model;
