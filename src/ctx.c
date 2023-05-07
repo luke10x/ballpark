@@ -55,29 +55,30 @@ ctx_t* ctx_create() {
   // 💜 Shaders
   ctx->default_shader = shader_create("src/shaders/default-vert.glsl", "src/shaders/default-frag.glsl");
   ctx->light_shader = shader_create("src/shaders/light-vert.glsl", "src/shaders/light-frag.glsl");
+
   // Vertices coordinates
   GLfloat vertices[] =
-  { //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
+  { //     COORDINATES   /        COLORS         /  TexCoord    /        NORMALS       //
     -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
     -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-    0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-    0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
 
     -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
     -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-    0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
 
     -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-    0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-    0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
 
-    0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-    0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-    0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,   5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,   2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
 
-    0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
     -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-    0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
   };
 
   // Indices for vertices order
@@ -129,10 +130,10 @@ ctx_t* ctx_create() {
 	ebo_t* EBO1 = ebo_create(indices, sizeof(indices));
 
   // Links VBO to VAO
-  vao_link_attrib(VAO1, VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*) 0);
-  vao_link_attrib(VAO1, VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-  vao_link_attrib(VAO1, VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-  vao_link_attrib(VAO1, VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+  vao_link_attrib(VAO1, VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*) 0);                  // Coordinates
+  vao_link_attrib(VAO1, VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Colors
+  vao_link_attrib(VAO1, VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float))); // TexCoord
+  vao_link_attrib(VAO1, VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Normals
 
 
   vao_unbind(VAO1);
@@ -156,15 +157,16 @@ ctx_t* ctx_create() {
 	vbo_unbind(lightVBO);
 	ebo_unbind(lightEBO);
 
-
 	vec4 lightColor;
-  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 1.0f }, lightColor);
+  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.9f }, lightColor);
+
   vec3 lightPos;
 	glm_vec3_copy((vec3){ 0.5f, 0.5f, 0.5f }, lightPos);
 	mat4 lightModel = GLM_MAT4_IDENTITY_INIT;
   glm_translate(lightModel, lightPos);
+
 	vec3 pyramidPos;
-  glm_vec3_copy((vec3){ 0.0f, 0.0f, 0.0f }, pyramidPos);
+  glm_vec3_copy((vec3){ -1.0f, 0.0f, -3.0f }, pyramidPos);
 	mat4 pyramidModel = GLM_MAT4_IDENTITY_INIT;
 	glm_translate(pyramidModel, pyramidPos);
 
@@ -191,7 +193,8 @@ ctx_t* ctx_create() {
 
   // Bind the VAO so OpenGL knows to use it
   vao_bind(VAO1);
-
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 
