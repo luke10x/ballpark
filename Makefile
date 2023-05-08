@@ -4,7 +4,7 @@
 esport.app:
 
 	gcc \
-	src/buffers.c src/ppm.c \
+	src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
 	-o esport.app \
 	-DGL_SILENCE_DEPRECATION \

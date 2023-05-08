@@ -19,6 +19,7 @@
 #include "ppm.h"
 #include "camera.h"
 #include "texture.h"
+#include "mesh.h"
 
 #include "ctx_init.c"
 
@@ -26,15 +27,12 @@ typedef struct {
   int should_continue;
   GLFWwindow* window;
   shader_t* default_shader;
-  GLsizei default_count;
-  vao_t* pyramid_vao;
-  
-  GLsizei light_count;
   shader_t* light_shader;
-  vao_t* light_vao;
+
+  mesh_t* pyramid;
+  mesh_t* lamp;
 
   camera_t* camera;
-  float aspect;
 } ctx_t;
 
 /*
@@ -52,7 +50,6 @@ ctx_t* ctx_create() {
 
   ctx_resize_framebuffer_to_window(ctx);
 
-  // 💜 Shaders
   ctx->default_shader = shader_create("src/shaders/default-vert.glsl", "src/shaders/default-frag.glsl");
   ctx->light_shader = shader_create("src/shaders/light-vert.glsl", "src/shaders/light-frag.glsl");
 
@@ -115,47 +112,8 @@ ctx_t* ctx_create() {
     4, 6, 7
   };
 
-	// Generates Vertex Array Object and binds it
-	vao_t* VAO1 = vao_create();
-
-  vao_bind(VAO1);
-
-  // Generates Vertex Buffer Object and links it to vertices
-	vbo_t* VBO1 = vbo_create(vertices, sizeof(vertices));
-
-  // Generates Element Buffer Object and links it to indices
-	ebo_t* EBO1 = ebo_create(indices, sizeof(indices));
-
-  // Links VBO to VAO
-  vao_link_attrib(VAO1, VBO1, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*) 0);                  // Coordinates
-  vao_link_attrib(VAO1, VBO1, 1, 3, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float))); // Colors
-  vao_link_attrib(VAO1, VBO1, 2, 2, GL_FLOAT, sizeof(vertex_t), (void*)(6 * sizeof(float))); // TexCoord
-  vao_link_attrib(VAO1, VBO1, 3, 3, GL_FLOAT, sizeof(vertex_t), (void*)(8 * sizeof(float))); // Normals
-
-
-  vao_unbind(VAO1);
-  vbo_unbind(VBO1);
-  ebo_unbind(EBO1); 
-
-  // Now same for light
-	// Generates Vertex Array Object and binds it
-	vao_t* lightVAO = vao_create();
-	vao_bind(lightVAO);
-
-
-	// Generates Vertex Buffer Object and links it to vertices
-	vbo_t* lightVBO = vbo_create(lightVertices, sizeof(lightVertices));
-	// Generates Element Buffer Object and links it to indices
-	ebo_t* lightEBO = ebo_create(lightIndices, sizeof(lightIndices));
-	// Links VBO attributes such as coordinates and colors to VAO
-	vao_link_attrib(lightVAO, lightVBO, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*)0);
-	// Unbind all to prevent accidentally modifying them
-	vao_unbind(lightVAO);
-	vbo_unbind(lightVBO);
-	ebo_unbind(lightEBO);
-
 	vec4 lightColor;
-  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.7f }, lightColor);
+  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.5f }, lightColor);
 
   vec3 lightPos;
 	glm_vec3_copy((vec3){ 0.5f, 0.5f, 0.5f }, lightPos);
@@ -167,17 +125,23 @@ ctx_t* ctx_create() {
 	mat4 pyramidModel = GLM_MAT4_IDENTITY_INIT;
 	glm_translate(pyramidModel, pyramidPos);
 
-  // Texture
   texture_t* pop_cat = texture_create(
-    // "04-12-wall",
-    // "02-04-wall",
     "05-01-wall",
      GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
   );
 
-  
-  texture_bind(pop_cat);
+  ctx->pyramid = mesh_create(
+    vertices, sizeof(vertices)  ,
+    indices,  sizeof(indices) ,
+    pop_cat, 1
+  );
 
+  ctx->lamp = mesh_create(
+    lightVertices, 352,
+    lightIndices,  144,
+    NULL, 0
+  );
+  
 	shader_activate(ctx->light_shader);
 	glUniformMatrix4fv(glGetUniformLocation(ctx->light_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)lightModel);
 	glUniform4f(glGetUniformLocation(ctx->light_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
@@ -188,29 +152,13 @@ ctx_t* ctx_create() {
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 	glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
-  // Bind the VAO so OpenGL knows to use it
-  vao_bind(VAO1);
-glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  	// Enables the Depth Buffer
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 
   int w, h;
   glfwGetFramebufferSize(ctx->window, &w, &h);
-
-  camera_t* camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
-
-	// Variables that help the rotation of the pyramid
-	// ctx.rotation = 0.0f;
-  ctx->default_count = sizeof(indices) / sizeof(int);
-  ctx->light_count = sizeof(lightIndices) / sizeof(int);
-  ctx->aspect = (float)w / h;
-  ctx->camera = camera;
-  ctx->pyramid_vao = VAO1;
-  ctx->light_vao = lightVAO;
-
-
-  // Shaders end 
+  ctx->camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
 
   return ctx;
 }
@@ -277,7 +225,6 @@ inline static void ctx_handle_input(ctx_t* ctx) {
   }
 
   camera_inputs(ctx->camera, ctx->window);
-
 }
 
 inline static void ctx_advance_state(ctx_t* ctx) {
@@ -290,36 +237,8 @@ inline static void ctx_render(ctx_t* ctx) {
     // Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-    // Shaders
-
-    // Tell OpenGL which Shader Program we want to use
-    shader_activate(ctx->default_shader);
-
-
-		// Exports the camera Position to the Fragment Shader for specular lighting
-		glUniform3f(
-      glGetUniformLocation(ctx->default_shader->ID, "camPos"),
-      ctx->camera->Position[0],
-      ctx->camera->Position[1],
-      ctx->camera->Position[2]
-      );
-
-    camera_matrix(ctx->camera, ctx->default_shader, "camMatrix");
-    // Draw primitives, number of indices, datatype of indices, index of indices
-    vao_bind(ctx->pyramid_vao);
-    glDrawElements(GL_TRIANGLES, ctx->default_count, GL_UNSIGNED_INT, 0);
-
-		// Tells OpenGL which Shader Program we want to use
-    shader_activate(ctx->light_shader);
-		// Export the camMatrix to the Vertex Shader of the light cube
-		camera_matrix(ctx->camera, ctx->light_shader, "camMatrix");
-		// Bind the VAO so OpenGL knows to use it
-    vao_bind(ctx->light_vao);
-		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, ctx->light_count, GL_UNSIGNED_INT, 0);
-
-    // End shaders
+    mesh_draw(ctx->pyramid, ctx->default_shader, ctx->camera);
+    mesh_draw(ctx->lamp,    ctx->light_shader,   ctx->camera);
 
     // Swap the back buffer with the front buffer
     glfwSwapBuffers(ctx->window);
