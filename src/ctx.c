@@ -121,7 +121,7 @@ ctx_t* ctx_create() {
   glm_translate(lightModel, lightPos);
 
 	vec3 pyramidPos;
-  glm_vec3_copy((vec3){ -1.0f, 0.0f, -3.0f }, pyramidPos);
+  glm_vec3_copy((vec3){ -1.0f, 0.0f, -1.0f }, pyramidPos);
 	mat4 pyramidModel = GLM_MAT4_IDENTITY_INIT;
 	glm_translate(pyramidModel, pyramidPos);
 
@@ -158,6 +158,8 @@ ctx_t* ctx_create() {
 
   int w, h;
   glfwGetFramebufferSize(ctx->window, &w, &h);
+  glViewport(0, 0, w, h);
+
   ctx->camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
 
   return ctx;

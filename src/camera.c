@@ -106,20 +106,53 @@ void camera_inputs(camera_t* self, GLFWwindow* window) {
     // Add the resulting vector to the Position
     glm_vec3_add(self->Position, result, self->Position);
 	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-    vec3 direction;
-    glm_cross(self->Position, self->Up, direction);
-    vec3 movement;
-    glm_vec3_scale(direction, -self->speed, movement);
-    glm_vec3_add(self->Position, movement, self->Position);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+    vec3 scaled_up;
+    glm_vec3_scale(self->Up, self->speed, scaled_up);
+    glm_vec3_add(self->Position, scaled_up, self->Position);
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
-    glm_vec3_scale(self->Up, -1.0f, self->Up);
-    glm_vec3_scale(self->Up, self->speed, self->Up);
-    glm_vec3_add(self->Position, self->Up, self->Position);
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+    vec3 scaled_up;
+    glm_vec3_scale(self->Up, -self->speed, scaled_up);
+    glm_vec3_add(self->Position, scaled_up, self->Position);
 	}
+
+  // Calculates upcoming vertical change in the Orientation
+  vec3 crossed, normalized, orientation_copy;
+  glm_vec3_copy(self->Orientation, orientation_copy);
+  glm_vec3_cross(self->Orientation, self->Up, crossed);
+  glm_normalize_to(crossed, normalized);
+
+  float rot_x = 0.0f;
+  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+    rot_x = 1.0f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+    rot_x = -1.0f;
+  }
+
+  if (rot_x != 0.0f) {
+    float angle = glm_vec3_angle(normalized, self->Up);
+
+    glm_vec3_rotate(orientation_copy, glm_rad(-rot_x), normalized);
+		if (fabsf(angle - glm_rad(90.0f)) <= glm_rad(85.0f)) {
+      glm_vec3_copy(orientation_copy, self->Orientation);
+		}
+  }
+
+  float rot_y = 0.0f;
+  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    rot_y = 1.0f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    rot_y = -1.0f;
+  }
+
+  if (rot_y != 0.0f) {
+    // Rotates the Orientation left and right
+    glm_vec3_rotate(self->Orientation, glm_rad(rot_y), self->Up);
+  }
+
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		self->speed = 0.4f;
