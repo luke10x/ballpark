@@ -8,6 +8,17 @@
 #include <GL/glew.h>
 #endif
 
+#include <cglm/cglm.h>
+
+// Structure to standardize the vertices used in the meshes
+typedef struct
+{
+	vec3 position;
+	vec3 normal;
+	vec3 color;
+	vec2 texUV;
+} vertex_t;
+
 /*
  * An Element Buffer Object (EBO) is a buffer
  * that stores indices for indexed rendering.
@@ -36,9 +47,10 @@ void ebo_delete(ebo_t* self);
  */
 typedef struct {
   GLuint ID;
+  GLsizei vertice_count;
 } vbo_t;
 
-vbo_t* vbo_create(GLfloat* vertices, GLsizeiptr size);
+vbo_t* vbo_create(vertex_t* vertices, GLsizei size);
 
 void vbo_bind (vbo_t* self);
 

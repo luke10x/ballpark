@@ -24,11 +24,12 @@ void ebo_delete(ebo_t* self) {
   free(self);
 }
 
-vbo_t* vbo_create(GLfloat* vertices, GLsizeiptr size) {
+vbo_t* vbo_create(vertex_t* vertices, GLsizei size) {
   vbo_t* self = malloc(sizeof(vbo_t));
   glGenBuffers(1, &(self->ID));
   glBindBuffer(GL_ARRAY_BUFFER, self->ID);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);  
+  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  self->vertice_count = size; 
   return self;
 }
 

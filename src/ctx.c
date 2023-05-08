@@ -57,30 +57,25 @@ ctx_t* ctx_create() {
   ctx->light_shader = shader_create("src/shaders/light-vert.glsl", "src/shaders/light-frag.glsl");
 
   // Vertices coordinates
-  GLfloat vertices[] =
-  { //     COORDINATES   /        COLORS         /  TexCoord    /        NORMALS       //
-    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-
-    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-
-    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-
-    0.5f,  0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,   5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,   2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
-
-    0.5f,  0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-    0.0f,  0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+  vertex_t vertices[] =
+  {
+    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
+    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 5.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
+    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 5.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
+    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
+    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
+    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
+    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
+    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
+    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
+    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
+    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
+    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
+    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
+    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}, // Facing side
+    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}, // Facing side
+    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}  // Facing side
   };
-
   // Indices for vertices order
   GLuint indices[] =
   {
@@ -92,16 +87,16 @@ ctx_t* ctx_create() {
     13, 15, 14 // Facing side
   };
 
-  GLfloat lightVertices[] =
+  vertex_t lightVertices[] =
   { //     COORDINATES     //
-    -0.1f, -0.1f,  0.1f,
-    -0.1f, -0.1f, -0.1f,
-    0.1f, -0.1f, -0.1f,
-    0.1f, -0.1f,  0.1f,
-    -0.1f,  0.1f,  0.1f,
-    -0.1f,  0.1f, -0.1f,
-    0.1f,  0.1f, -0.1f,
-    0.1f,  0.1f,  0.1f
+    { .position = {-0.1f, -0.1f,  0.1f}},
+    { .position = {-0.1f, -0.1f, -0.1f}},
+    { .position = {0.1f, -0.1f,  -0.1f}},
+    { .position = {0.1f, -0.1f,   0.1f}},
+    { .position = {-0.1f,  0.1f,  0.1f}},
+    { .position = {-0.1f,  0.1f, -0.1f}},
+    { .position = {0.1f,  0.1f,  -0.1f}},
+    { .position = {0.1f,  0.1f,   0.1f}}
   };
 
   GLuint lightIndices[] =
@@ -122,18 +117,20 @@ ctx_t* ctx_create() {
 
 	// Generates Vertex Array Object and binds it
 	vao_t* VAO1 = vao_create();
+
   vao_bind(VAO1);
 
   // Generates Vertex Buffer Object and links it to vertices
 	vbo_t* VBO1 = vbo_create(vertices, sizeof(vertices));
+
   // Generates Element Buffer Object and links it to indices
 	ebo_t* EBO1 = ebo_create(indices, sizeof(indices));
 
   // Links VBO to VAO
-  vao_link_attrib(VAO1, VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*) 0);                  // Coordinates
-  vao_link_attrib(VAO1, VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Colors
-  vao_link_attrib(VAO1, VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float))); // TexCoord
-  vao_link_attrib(VAO1, VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Normals
+  vao_link_attrib(VAO1, VBO1, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*) 0);                  // Coordinates
+  vao_link_attrib(VAO1, VBO1, 1, 3, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float))); // Colors
+  vao_link_attrib(VAO1, VBO1, 2, 2, GL_FLOAT, sizeof(vertex_t), (void*)(6 * sizeof(float))); // TexCoord
+  vao_link_attrib(VAO1, VBO1, 3, 3, GL_FLOAT, sizeof(vertex_t), (void*)(8 * sizeof(float))); // Normals
 
 
   vao_unbind(VAO1);
@@ -151,14 +148,14 @@ ctx_t* ctx_create() {
 	// Generates Element Buffer Object and links it to indices
 	ebo_t* lightEBO = ebo_create(lightIndices, sizeof(lightIndices));
 	// Links VBO attributes such as coordinates and colors to VAO
-	vao_link_attrib(lightVAO, lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	vao_link_attrib(lightVAO, lightVBO, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*)0);
 	// Unbind all to prevent accidentally modifying them
 	vao_unbind(lightVAO);
 	vbo_unbind(lightVBO);
 	ebo_unbind(lightEBO);
 
 	vec4 lightColor;
-  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.9f }, lightColor);
+  glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.7f }, lightColor);
 
   vec3 lightPos;
 	glm_vec3_copy((vec3){ 0.5f, 0.5f, 0.5f }, lightPos);
