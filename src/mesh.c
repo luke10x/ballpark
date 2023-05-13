@@ -1,6 +1,7 @@
 #include "mesh.h"
 
 mesh_t* mesh_create(
+  char* name,
   vertex_t* vertices,
   GLsizei vertex_count,
   GLuint* indices,

@@ -5,9 +5,11 @@
 #include "buffers.h"
 #include "camera.h"
 #include "texture.h"
+
 #pragma once
 
 typedef struct {
+  char* name;
   vertex_t* vertices;
   GLsizei vertex_count;
 
@@ -22,6 +24,7 @@ typedef struct {
 
 
 mesh_t* mesh_create(
+  char* name,
   vertex_t* vertices,
   GLsizei vertex_count,
   GLuint* indices,

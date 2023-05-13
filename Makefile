@@ -4,7 +4,7 @@
 esport.app:
 
 	gcc \
-	src/camera.c src/mesh.c src/buffers.c src/ppm.c \
+	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
 	-o esport.app \
 	-DGL_SILENCE_DEPRECATION \
@@ -26,3 +26,7 @@ run: clean esport.app
 	./esport.app
 
 .PHONY=clean run
+
+assets/ppm:
+	mkdir -p assets/ppm
+	mogrify -path assets/png -format ppm assets/ppm/*.ppm

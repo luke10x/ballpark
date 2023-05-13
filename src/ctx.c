@@ -20,6 +20,7 @@
 #include "camera.h"
 #include "texture.h"
 #include "mesh.h"
+#include "model.h"
 
 #include "ctx_init.c"
 
@@ -31,6 +32,8 @@ typedef struct {
 
   mesh_t* pyramid;
   mesh_t* lamp;
+
+  model_t* subject;
 
   camera_t* camera;
 } ctx_t;
@@ -131,12 +134,14 @@ ctx_t* ctx_create() {
   );
 
   ctx->pyramid = mesh_create(
+    "pyram",
     vertices, sizeof(vertices)  ,
     indices,  sizeof(indices) ,
     pop_cat, 1
   );
 
   ctx->lamp = mesh_create(
+    "light",
     lightVertices, 352,
     lightIndices,  144,
     NULL, 0
@@ -161,6 +166,8 @@ ctx_t* ctx_create() {
   glViewport(0, 0, w, h);
 
   ctx->camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
+
+  ctx->subject = model_create("luke");
 
   return ctx;
 }
@@ -241,6 +248,8 @@ inline static void ctx_render(ctx_t* ctx) {
 
     mesh_draw(ctx->pyramid, ctx->default_shader, ctx->camera);
     mesh_draw(ctx->lamp,    ctx->light_shader,   ctx->camera);
+
+    model_draw(ctx->subject, ctx->default_shader, ctx->camera);
 
     // Swap the back buffer with the front buffer
     glfwSwapBuffers(ctx->window);
