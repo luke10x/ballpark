@@ -10,7 +10,7 @@ mesh_t* mesh_create(
   GLsizei texture_count
 ) {
 
-            printf("Creating mesh with vertices:\n");
+            printf("Creating mesh \"%s\" with vertices:\n", name);
           for (int i = 0; i < vertex_count/ sizeof(vertex_t); i++) {
               vertex_t* vert = &(vertices[i]);
               printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
@@ -20,7 +20,7 @@ mesh_t* mesh_create(
                 vert->normal[0], vert->normal[1], vert->normal[2]
               );
           }
-          printf("Creating mesh with indices: [ \n");
+          printf("with indices: [ ");
           for (int i = 0; i < index_count/ sizeof(GLuint); i++) {
             GLuint idx = (indices[i]);
             printf("%d, ", idx);

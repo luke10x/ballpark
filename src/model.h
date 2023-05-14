@@ -4,7 +4,7 @@
 
 typedef struct {
   char* name;
-  mesh_t* meshes;
+  mesh_t** meshes;
   GLsizei mesh_count;
 } model_t;
 

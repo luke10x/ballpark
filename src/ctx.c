@@ -143,8 +143,7 @@ ctx_t* ctx_create() {
     NULL, 0
   );
   
-  ctx->subject = model_create("luke");
-    texture_t* pop_cat = texture_create(
+  texture_t* pop_cat = texture_create(
     "05-01-wall",
      GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
   );
@@ -164,6 +163,9 @@ ctx_t* ctx_create() {
 	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)pyramidModel);
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 	glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
+
+  ctx->subject = model_create("luke");
+
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

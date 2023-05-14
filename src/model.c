@@ -11,16 +11,9 @@
 #define MAX_FACES 2048
 #define MAX_VERTICES 2048
 
-
 typedef struct {
   uint8_t r,g,b;
 } t_pixel;
-
-// typedef struct {
-//   char* name;
-//   t_pixel* pixels;
-//   int width, height;
-// } t_material;
 
 typedef struct {
   float x, y, z;
@@ -73,7 +66,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   int offset =0; 
   int mesh_added = 0;
-  mesh_t* mesh;
+  mesh_t* meshes;
 
   while (!feof(file)) {
       char line[128];
@@ -102,49 +95,33 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
       // Objects
       else if (line[0] == 'o' && line[1] == ' ') {
 
-
         // If we start an object, and there is an object already
         // then we need to create a mesh first
-        if (offset < b_count && mesh_added == 0) {
-          mesh_added++;
+        if (offset < b_count && mesh_added < 3) {
           vertex_t* old_mesh_start = &(B[offset]);
           GLsizei old_mesh_size = b_count - offset;
           
           GLuint* old_mesh_indices_start = &(I[offset]);
           GLsizei old_mesh_indixes_size = b_count - offset; // same
 
-          // printf("Creating mesh with vertices:\n");
-          // for (int i = offset; i < b_count; i++) {
-          //     vertex_t* vert = &(old_mesh_start[i]);
-          //     printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
-          //       vert->position[0], vert->position[1], vert->position[2],
-          //       vert->color[0], vert->color[1], vert->color[2],
-          //       vert->texUV[0], vert->texUV[1],
-          //       vert->normal[0], vert->normal[1], vert->normal[2]
-          //     );
-          // }
-          // printf("Creating mesh with indices: [ \n");
-          // for (int i = offset; i < b_count; i++) {
-          //   GLuint idx = (old_mesh_indices_start[i]);
-          //   printf("%d, ", idx);
-          // }
-          // printf("] //end\n");
+          texture_t* pop_cat = texture_create(
+            "18-17-leaf",
+            GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
+          );
+          mesh_t* new_mesh = mesh_create(O[o_count].name,
+            old_mesh_start, old_mesh_size * sizeof(vertex_t),
+            old_mesh_indices_start, old_mesh_indixes_size * sizeof(GLuint),
+            pop_cat, 1);
 
+          buffers[mesh_added] = new_mesh;
 
-            texture_t* pop_cat = texture_create(
-              "18-17-leaf",
-              GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
-            );
-          mesh = mesh_create("first", old_mesh_start, old_mesh_size * sizeof(vertex_t),
-                            old_mesh_indices_start, old_mesh_indixes_size * sizeof(GLuint),
-                            pop_cat, 1);
-
+          mesh_added++;
           offset = b_count;
-
         }
 
         o_count++;
 
+        // Extract name from second character of the line
         int nameLength = strlen(line) - 2;
         O[o_count].name = strdup(line + 2); // Skip "o " prefix
         O[o_count].name[nameLength - 1] = '\0';
@@ -181,7 +158,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
           .normal = { VN[vn1 - 1][0], VN[vn1 - 1][1], VN[vn1 - 1][2]}
         };
-        I[b_count] = b_count;
+        I[b_count] = b_count - offset;
         b_count++;
 
         F[f_count].v2.x = V[v2 - 1].x;
@@ -193,7 +170,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v },
           .normal = { VN[vn2 - 1][0], VN[vn2 - 1][1], VN[vn2 - 1][2]}
         };
-        I[b_count] = b_count;
+        I[b_count] = b_count - offset;
         b_count++;
 
         F[f_count].v3.x = V[v3 - 1].x;
@@ -206,7 +183,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .normal = { VN[vn3 - 1][0], VN[vn3 - 1][1], VN[vn3 - 1][2]
           }
         };
-        I[b_count] = b_count;
+        I[b_count] = b_count - offset;
         b_count++;
 
         F[f_count].vt1.u = VT[vt1 - 1].u;
@@ -229,8 +206,9 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   free(V);
 
   // *faces = F;
-  *buffers = mesh;
-  return b_count;
+  // *buffers = mesh;
+  
+  return mesh_added;
 
   // This could be usefull for debug
   for (int i = 0; i < f_count; i++) {
@@ -265,11 +243,10 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 model_t* model_create(char* name) {
   model_t* self = malloc(sizeof(model_t));
 
-  mesh_t* buffers = NULL;
-  int num_buffers = buffers_load_from_file("assets/obj/cube.obj", &buffers);
-  // int num_buffers = buffers_load_from_file("assets/obj/luke.obj", &buffers);
+  self->meshes = malloc(sizeof(mesh_t) * 50);
 
-  self->meshes = buffers;
+  int num_buffers = buffers_load_from_file("assets/obj/cube.obj", self->meshes);
+
   self->mesh_count = num_buffers;
 
 
@@ -281,7 +258,8 @@ model_t* model_create(char* name) {
 
 
 void model_draw(model_t* model, shader_t* shader, camera_t* camera) {
-  mesh_t* first_mesh = model->meshes;
-  mesh_draw(first_mesh, shader, camera );
-
+  for (int i = 0; i < model->mesh_count; i++) {
+    mesh_t* mesh = model->meshes[i];
+    mesh_draw(mesh, shader, camera );
+  }
 }
