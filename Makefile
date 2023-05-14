@@ -29,4 +29,4 @@ run: clean esport.app
 
 assets/ppm:
 	mkdir -p assets/ppm
-	mogrify -path assets/png -format ppm assets/ppm/*.ppm
+	mogrify -path assets/ppm -format ppm assets/png/*.png

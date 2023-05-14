@@ -15,7 +15,9 @@ build:
     --preload-file ../src/shaders/light-frag.glsl@src/shaders/light-frag.glsl \
     --preload-file ../src/shaders/default-vert.glsl@src/shaders/default-vert.glsl \
     --preload-file ../src/shaders/default-frag.glsl@src/shaders/default-frag.glsl \
-		--preload-file ../assets/ppm/05-01-wall.ppm@assets/ppm/05-01-wall.ppm
+		--preload-file ../assets/ppm/05-01-wall.ppm@assets/ppm/05-01-wall.ppm \
+		--preload-file ../assets/ppm/18-17-leaf.ppm@assets/ppm/18-17-leaf.ppm \
+		--preload-file ../assets/obj/cube.obj@assets/obj/cube.obj
 
 clean:
 	rm -fr build/

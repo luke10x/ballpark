@@ -3,10 +3,10 @@
 precision mediump float;
 out vec4 fragColor;
 
+in vec3 crntPos;
 in vec3 color;
 in vec2 texCoord;
 in vec3 Normal;
-in vec3 crntPos;
 
 uniform sampler2D tex0;
 uniform vec4 lightColor;

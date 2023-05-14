@@ -59,23 +59,24 @@ ctx_t* ctx_create() {
   // Vertices coordinates
   vertex_t vertices[] =
   {
-    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
-    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 5.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
-    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 5.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
-    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ -1.0f, 0.0f}}, // Bottom side
-    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
-    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
-    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f,-0.8f }, .texUV={ 0.5f,  0.0f}}, // Left Side
-    { .position = {-0.5f, 0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
-    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
-    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.0f }, .texUV={ 0.5f, -0.8f}}, // Non-facing side
-    { .position = {0.5f,  0.0f, -0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
-    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
-    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.8f }, .texUV={ 0.5f,  0.0f}}, // Right side
-    { .position = {0.5f,  0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 5.0f, 0.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}, // Facing side
-    { .position = {-0.5f, 0.0f,  0.5f}, .normal = {0.83f, 0.70f, 0.44f}, .color = { 0.0f, 0.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}, // Facing side
-    { .position = {0.0f,  0.8f,  0.0f}, .normal = {0.92f, 0.86f, 0.76f}, .color = { 2.5f, 5.0f, 0.0f }, .texUV={ 0.5f,  0.8f}}  // Facing side
+    { .position = {-0.5f, 0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 0.0f }, .normal = {  0.0f, -1.0f, 0.0f }}, // Bottom side
+    { .position = {-0.5f, 0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 5.0f }, .normal = {  0.0f, -1.0f, 0.0f }}, // Bottom side
+    { .position = {0.5f,  0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 5.0f }, .normal = {  0.0f, -1.0f, 0.0f }}, // Bottom side
+    { .position = {0.5f,  0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 0.0f }, .normal = {  0.0f, -1.0f, 0.0f }}, // Bottom side
+    { .position = {-0.5f, 0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 0.0f }, .normal = { -0.8f, 0.5f,  0.0f }}, // Left Side
+    { .position = {-0.5f, 0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 0.0f }, .normal = { -0.8f, 0.5f,  0.0f }}, // Left Side
+    { .position = {0.0f,  0.8f,  0.0f}, .color = { 0.92f, 0.86f, 0.76f }, .texUV = { 2.5f, 5.0f }, .normal = { -0.8f, 0.5f,  0.0f }}, // Left Side
+    { .position = {-0.5f, 0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 0.0f }, .normal = {  0.0f, 0.5f, -0.8f }}, // Non-facing side
+    { .position = {0.5f,  0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 0.0f }, .normal = {  0.0f, 0.5f, -0.8f }}, // Non-facing side
+    { .position = {0.0f,  0.8f,  0.0f}, .color = { 0.92f, 0.86f, 0.76f }, .texUV = { 2.5f, 5.0f }, .normal = {  0.0f, 0.5f, -0.8f }}, // Non-facing side
+    { .position = {0.5f,  0.0f, -0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 0.0f }, .normal = {  0.8f, 0.5f,  0.0f }}, // Right side
+    { .position = {0.5f,  0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 0.0f }, .normal = {  0.8f, 0.5f,  0.0f }}, // Right side
+    { .position = {0.0f,  0.8f,  0.0f}, .color = { 0.92f, 0.86f, 0.76f }, .texUV = { 2.5f, 5.0f }, .normal = {  0.8f, 0.5f,  0.0f }}, // Right side
+    { .position = {0.5f,  0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 5.0f, 0.0f }, .normal = {  0.0f, 0.5f,  0.8f }}, // Facing side
+    { .position = {-0.5f, 0.0f,  0.5f}, .color = { 0.83f, 0.70f, 0.44f }, .texUV = { 0.0f, 0.0f }, .normal = {  0.0f, 0.5f,  0.8f }}, // Facing side
+    { .position = {0.0f,  0.8f,  0.0f}, .color = { 0.92f, 0.86f, 0.76f }, .texUV = { 2.5f, 5.0f }, .normal = {  0.0f, 0.5f,  0.8f }}  // Facing side
   };
+  
   // Indices for vertices order
   GLuint indices[] =
   {
@@ -128,7 +129,22 @@ ctx_t* ctx_create() {
 	mat4 pyramidModel = GLM_MAT4_IDENTITY_INIT;
 	glm_translate(pyramidModel, pyramidPos);
 
-  texture_t* pop_cat = texture_create(
+  // vec3 subjectPos;
+  // glm_vec3_copy((vec3){ -1.0f, 0.0f, -1.0f }, subjectPos);
+	// mat4 subjectModel = GLM_MAT4_IDENTITY_INIT;
+	// glm_translate(subjectModel,subjectPos);
+
+
+
+  ctx->lamp = mesh_create(
+    "light",
+    lightVertices, 352,
+    lightIndices,  144,
+    NULL, 0
+  );
+  
+  ctx->subject = model_create("luke");
+    texture_t* pop_cat = texture_create(
     "05-01-wall",
      GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
   );
@@ -139,14 +155,6 @@ ctx_t* ctx_create() {
     indices,  sizeof(indices) ,
     pop_cat, 1
   );
-
-  ctx->lamp = mesh_create(
-    "light",
-    lightVertices, 352,
-    lightIndices,  144,
-    NULL, 0
-  );
-  
 	shader_activate(ctx->light_shader);
 	glUniformMatrix4fv(glGetUniformLocation(ctx->light_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)lightModel);
 	glUniform4f(glGetUniformLocation(ctx->light_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
@@ -167,7 +175,6 @@ ctx_t* ctx_create() {
 
   ctx->camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
 
-  ctx->subject = model_create("luke");
 
   return ctx;
 }
@@ -242,7 +249,7 @@ inline static void ctx_advance_state(ctx_t* ctx) {
 
 inline static void ctx_render(ctx_t* ctx) {
     // Specify the color of the background
-    glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+    glClearColor(0.4f, 0.33f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

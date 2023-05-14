@@ -2,5 +2,6 @@
   "files.associations": {
     "*.js": "javascript",
     "*.h": "c",
+    "__node_handle": "c"
   }
 }

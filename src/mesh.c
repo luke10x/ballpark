@@ -9,6 +9,24 @@ mesh_t* mesh_create(
   texture_t* textures,
   GLsizei texture_count
 ) {
+
+            printf("Creating mesh with vertices:\n");
+          for (int i = 0; i < vertex_count/ sizeof(vertex_t); i++) {
+              vertex_t* vert = &(vertices[i]);
+              printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
+                vert->position[0], vert->position[1], vert->position[2],
+                vert->color[0], vert->color[1], vert->color[2],
+                vert->texUV[0], vert->texUV[1],
+                vert->normal[0], vert->normal[1], vert->normal[2]
+              );
+          }
+          printf("Creating mesh with indices: [ \n");
+          for (int i = 0; i < index_count/ sizeof(GLuint); i++) {
+            GLuint idx = (indices[i]);
+            printf("%d, ", idx);
+          }
+          printf("] //end\n");
+
   mesh_t* mesh = malloc(sizeof(mesh_t));
 
   mesh->vertices = vertices;
@@ -27,12 +45,11 @@ mesh_t* mesh_create(
   vbo_t* vbo = vbo_create(mesh->vertices, mesh->vertex_count);
   ebo_t* ebo = ebo_create(mesh->indices, mesh->index_count);
 
-  // vao_link_attrib(mesh->vao, mesh->vbo, 0, 3)
 	// Links VBO attributes such as coordinates and colors to VAO
 	vao_link_attrib(mesh->vao, vbo, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*)0);
 	vao_link_attrib(mesh->vao, vbo, 1, 3, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float)));
-	vao_link_attrib(mesh->vao, vbo, 2, 3, GL_FLOAT, sizeof(vertex_t), (void*)(6 * sizeof(float)));
-	vao_link_attrib(mesh->vao, vbo, 3, 2, GL_FLOAT, sizeof(vertex_t), (void*)(9 * sizeof(float)));
+	vao_link_attrib(mesh->vao, vbo, 2, 2, GL_FLOAT, sizeof(vertex_t), (void*)(6 * sizeof(float)));
+	vao_link_attrib(mesh->vao, vbo, 3, 3, GL_FLOAT, sizeof(vertex_t), (void*)(8 * sizeof(float)));
 	// Unbind all to prevent accidentally modifying them
 
   vao_unbind(mesh->vao);

@@ -110,28 +110,29 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           vertex_t* old_mesh_start = &(B[offset]);
           GLsizei old_mesh_size = b_count - offset;
           
-          printf("Creating mesh with vertices:\n");
-          for (int i = offset; i < b_count; i++) {
-              vertex_t* vert = &(old_mesh_start[i]);
-              printf(" { .position = {%.3f, %.3f,  %.3f},  .normal = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f } },\n",
-                vert->position[0], vert->position[1], vert->position[2],
-                vert->normal[0], vert->normal[1], vert->normal[2],
-                vert->color[0], vert->color[1], vert->color[2],
-                vert->texUV[0], vert->texUV[1]
-              );
-          }
-          printf("Creating mesh with indices: [ \n");
           GLuint* old_mesh_indices_start = &(I[offset]);
           GLsizei old_mesh_indixes_size = b_count - offset; // same
-          for (int i = offset; i < b_count; i++) {
-            GLuint idx = (old_mesh_indices_start[i]);
-            printf("%d, ", idx);
-          }
-          printf("] //end\n");
+
+          // printf("Creating mesh with vertices:\n");
+          // for (int i = offset; i < b_count; i++) {
+          //     vertex_t* vert = &(old_mesh_start[i]);
+          //     printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
+          //       vert->position[0], vert->position[1], vert->position[2],
+          //       vert->color[0], vert->color[1], vert->color[2],
+          //       vert->texUV[0], vert->texUV[1],
+          //       vert->normal[0], vert->normal[1], vert->normal[2]
+          //     );
+          // }
+          // printf("Creating mesh with indices: [ \n");
+          // for (int i = offset; i < b_count; i++) {
+          //   GLuint idx = (old_mesh_indices_start[i]);
+          //   printf("%d, ", idx);
+          // }
+          // printf("] //end\n");
 
 
             texture_t* pop_cat = texture_create(
-              "05-01-wall",
+              "18-17-leaf",
               GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
             );
           mesh = mesh_create("first", old_mesh_start, old_mesh_size * sizeof(vertex_t),
@@ -176,9 +177,9 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
         B[b_count] = (vertex_t){
           .position = {V[v1 - 1].x, V[v1 - 1].y,  V[v1 - 1].z},
-          .normal = { VN[vn1 - 1][0], VN[vn1 - 1][1], VN[vn1 - 1][2]},
           .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v }
+          .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
+          .normal = { VN[vn1 - 1][0], VN[vn1 - 1][1], VN[vn1 - 1][2]}
         };
         I[b_count] = b_count;
         b_count++;
@@ -188,9 +189,9 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         F[f_count].v2.z = V[v2 - 1].z;
         B[b_count] = (vertex_t){
           .position = {V[v2 - 1].x, V[v2 - 1].y,  V[v2 - 1].z},
-          .normal = { VN[vn2 - 1][0], VN[vn2 - 1][1], VN[vn2 - 1][2]},
           .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v }
+          .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v },
+          .normal = { VN[vn2 - 1][0], VN[vn2 - 1][1], VN[vn2 - 1][2]}
         };
         I[b_count] = b_count;
         b_count++;
@@ -200,9 +201,10 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         F[f_count].v3.z = V[v3 - 1].z;
         B[b_count] = (vertex_t){
           .position = {V[v3 - 1].x, V[v3- 1].y,  V[v3 - 1].z},
-          .normal = { VN[vn3 - 1][0], VN[vn3 - 1][1], VN[vn3 - 1][2]},
           .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt3 - 1].u, VT[vt3 - 1].v }
+          .texUV={ VT[vt3 - 1].u, VT[vt3 - 1].v },
+          .normal = { VN[vn3 - 1][0], VN[vn3 - 1][1], VN[vn3 - 1][2]
+          }
         };
         I[b_count] = b_count;
         b_count++;
@@ -261,13 +263,11 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 }
 
 model_t* model_create(char* name) {
-
   model_t* self = malloc(sizeof(model_t));
 
-
   mesh_t* buffers = NULL;
-
-  int num_buffers = buffers_load_from_file("assets/obj/luke.obj", &buffers);
+  int num_buffers = buffers_load_from_file("assets/obj/cube.obj", &buffers);
+  // int num_buffers = buffers_load_from_file("assets/obj/luke.obj", &buffers);
 
   self->meshes = buffers;
   self->mesh_count = num_buffers;

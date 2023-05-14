@@ -14,9 +14,9 @@
 typedef struct
 {
 	vec3 position;
-	vec3 normal;
 	vec3 color;
 	vec2 texUV;
+	vec3 normal;
 } vertex_t;
 
 /*
