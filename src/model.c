@@ -66,7 +66,9 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   int offset =0; 
   int mesh_added = 0;
-  mesh_t* meshes;
+  // mesh_t* meshes;
+
+  texture_t* current_texture = NULL; 
 
   while (!feof(file)) {
       char line[128];
@@ -104,14 +106,14 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           GLuint* old_mesh_indices_start = &(I[offset]);
           GLsizei old_mesh_indixes_size = b_count - offset; // same
 
-          texture_t* pop_cat = texture_create(
-            "18-17-leaf",
-            GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
-          );
+          if (current_texture == NULL) {
+            printf("Current texture is not set while trying to create mesh for \"%s\"\n", O[o_count].name);
+          }
+
           mesh_t* new_mesh = mesh_create(O[o_count].name,
             old_mesh_start, old_mesh_size * sizeof(vertex_t),
             old_mesh_indices_start, old_mesh_indixes_size * sizeof(GLuint),
-            pop_cat, 1);
+            current_texture, 1);
 
           buffers[mesh_added] = new_mesh;
 
@@ -135,9 +137,10 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         char* filename = strndup(line + 7,  strlen(line + 7) - 1); // Skip "usemtl " prefix
         // TODO Optimize, do not load pixes of already loaded files
         // t_material* material = &M[m_count];
-        ppm_t* material = &M[m_count];
-        ppm_load(filename, &material, 0);
-
+        current_texture = texture_create(
+          filename,
+          GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
+        );
       }
 
       // Finally faces
@@ -205,39 +208,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   free(VT);
   free(V);
 
-  // *faces = F;
-  // *buffers = mesh;
-  
   return mesh_added;
-
-  // This could be usefull for debug
-  for (int i = 0; i < f_count; i++) {
-    printf("F: %d/%d in '%s' using '%s' (%dx%d) \n",
-    i+1, f_count, F[i].obj->name, F[i].m->name, F[i].m->width, F[i].m->height );
-    printf(" - Vertex (%3.3f, %3.3f, %3.3f) with UV (%.3f, %.3f)\n",
-      F[i] .v1.x,
-      F[i] .v1.y,
-      F[i] .v1.z,
-      F[i].vt1.u,
-      F[i].vt1.v
-    );
-    printf(" - Vertex (%3.3f, %.3f, %3.3f) with UV (%.3f, %.3f)\n",
-      F[i] .v2.x,
-      F[i] .v2.y,
-      F[i] .v2.z,
-      F[i].vt2.u,
-      F[i].vt2.v
-    );
-    printf(" - Vertex (%3.3f, %3.3f, %3.3f) with UV (%.3f, %.3f)\n",
-      F[i] .v3.x,
-      F[i] .v3.y,
-      F[i] .v3.z,
-      F[i].vt3.u,
-      F[i].vt3.v
-    );
-  }
-  return b_count;
-  // return f_count;
 }
 
 model_t* model_create(char* name) {
