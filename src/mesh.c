@@ -9,26 +9,34 @@ mesh_t* mesh_create(
   texture_t* textures,
   GLsizei texture_count
 ) {
+  if (textures == NULL) {
+    printf("texture not set while trying to create mesh for \"%s\"\n", name);
+  }
 
-            printf("Creating mesh \"%s\" with vertices:\n", name);
-          for (int i = 0; i < vertex_count/ sizeof(vertex_t); i++) {
-              vertex_t* vert = &(vertices[i]);
-              printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
-                vert->position[0], vert->position[1], vert->position[2],
-                vert->color[0], vert->color[1], vert->color[2],
-                vert->texUV[0], vert->texUV[1],
-                vert->normal[0], vert->normal[1], vert->normal[2]
-              );
-          }
-          printf("with indices: [ ");
-          for (int i = 0; i < index_count/ sizeof(GLuint); i++) {
-            GLuint idx = (indices[i]);
-            printf("%d, ", idx);
-          }
-          printf("] //end\n");
+  printf("Creating mesh \"%s\" with vertices:\n", name);
+  for (int i = 0; i < vertex_count/ sizeof(vertex_t); i++) {
+      vertex_t* vert = &(vertices[i]);
+      printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
+        vert->position[0], vert->position[1], vert->position[2],
+        vert->color[0], vert->color[1], vert->color[2],
+        vert->texUV[0], vert->texUV[1],
+        vert->normal[0], vert->normal[1], vert->normal[2]
+      );
+  }
+
+  printf("  with indices: [ ");
+  for (int i = 0; i < index_count/ sizeof(GLuint); i++) {
+    GLuint idx = (indices[i]);
+    printf("%d, ", idx);
+  }
+  printf("];\n");
 
   mesh_t* mesh = malloc(sizeof(mesh_t));
 
+  // TODO copy vertices and indices, becuase it is owned by outside code,
+  // and can be gone at any moment.
+  // Yet, these are not used anyway but in case they are planned to be used
+  // then thy must be copied
   mesh->vertices = vertices;
   mesh->vertex_count = vertex_count;
 
