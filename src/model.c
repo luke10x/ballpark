@@ -87,7 +87,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
       // Normals
       else if (line[0] == 'v' && line[1] == 'n') {
-        sscanf(line, "vn %f %f %f", &(VN[vt_count][0]), &(VN[vt_count][1]), &(VN[vt_count][2]));
+        sscanf(line, "vn %f %f %f", &(VN[vn_count][0]), &(VN[vn_count][1]), &(VN[vn_count][2]));
         vn_count++;
       }
 
@@ -171,7 +171,6 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         };
         I[b_count] = b_count - offset;
         b_count++;
-
       }
   }
   fclose(file);

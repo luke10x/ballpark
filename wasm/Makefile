@@ -17,6 +17,12 @@ build:
     --preload-file ../src/shaders/default-frag.glsl@src/shaders/default-frag.glsl \
 		--preload-file ../assets/ppm/05-01-wall.ppm@assets/ppm/05-01-wall.ppm \
 		--preload-file ../assets/ppm/18-17-leaf.ppm@assets/ppm/18-17-leaf.ppm \
+		--preload-file ../assets/ppm/test.ppm@assets/ppm/test.ppm \
+		--preload-file ../assets/ppm/text.ppm@assets/ppm/text.ppm \
+		--preload-file ../assets/ppm/17-03-grass.ppm@assets/ppm/17-03-grass.ppm \
+		--preload-file ../assets/ppm/30-03-top-block.ppm@assets/ppm/30-03-top-block.ppm \
+		--preload-file ../assets/ppm/15-03-box-top.ppm@assets/ppm/15-03-box-top.ppm \
+		--preload-file ../assets/ppm/steve.ppm@assets/ppm/steve.ppm \
 		--preload-file ../assets/obj/cube.obj@assets/obj/cube.obj
 
 clean:
