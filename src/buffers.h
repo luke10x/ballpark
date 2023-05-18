@@ -13,10 +13,11 @@
 // Structure to standardize the vertices used in the meshes
 typedef struct
 {
-	vec3 position;
-	vec3 color;
-	vec2 texUV;
-	vec3 normal;
+	vec3  position;
+	vec3  color;
+	vec2  texUV;
+	float tex_id;
+	vec3  normal;
 } vertex_t;
 
 /*

@@ -146,6 +146,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v1 - 1].x, V[v1 - 1].y,  V[v1 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
+          .tex_id=0,
           .normal = { VN[vn1 - 1][0], VN[vn1 - 1][1], VN[vn1 - 1][2]}
         };
         I[b_count] = b_count - offset;
