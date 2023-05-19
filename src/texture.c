@@ -25,6 +25,10 @@ texture_t* texture_create(
 //  printf("pixels %s %dx%d .. \n", bytes,widthImg, heightImg );
   glGenTextures(1, &(self->ID));
   glActiveTexture(slot);
+
+  // Check again how this is done
+  self->unit = slot;
+
   glBindTexture(self->type, self->ID);
 
   glTexParameteri(self->type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -39,11 +43,8 @@ texture_t* texture_create(
   free(material->pixels);
   free(material);
 
-  // The following line should be uncommented
+  // Unbind to make suree something else does not interfere
   glBindTexture(self->type, 0);
-
-  // Should work without this
-  glBindTexture(self->type, self->ID);
 
   return self;
 }
@@ -55,6 +56,8 @@ void texture_unit(texture_t* self, shader_t* shader, const char* uniform, GLuint
 }
 
 void texture_bind(texture_t* self) {
+  // TODO improve on what we call slot and texture
+  glActiveTexture(self->unit);
   glBindTexture(self->type, self->ID);
 }
 

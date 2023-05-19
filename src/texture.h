@@ -17,6 +17,7 @@
 typedef struct {
   GLuint ID;
   GLenum type;
+  GLuint unit;
 } texture_t;
 
 #include "shader.h"

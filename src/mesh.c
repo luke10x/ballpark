@@ -54,15 +54,15 @@ mesh_t* mesh_create(
     mesh->textures = textures[0];
     if (textures[1] != NULL) {
       texture_t* addr = &(mesh->textures[1]);
-      memcpy(addr,  textures + sizeof(textures), sizeof(texture_t));
+      memcpy(addr,  textures[1] , sizeof(texture_t));
     }
     if (textures[2] != NULL) {
       texture_t* addr = &(mesh->textures[2]);
-      memcpy(addr,  textures + 2*sizeof(textures), sizeof(texture_t));
+      memcpy(addr,  textures[2], sizeof(texture_t));
     }
     if (textures[3] != NULL) {
       texture_t* addr = &(mesh->textures[3]);
-      memcpy(addr,  textures + 3*sizeof(textures), sizeof(texture_t));
+      memcpy(addr,  textures[3], sizeof(texture_t));
     }
   }
   mesh->texture_count = texture_count;
@@ -116,12 +116,11 @@ void mesh_draw(mesh_t* mesh, shader_t* shader, camera_t* camera) {
 		// {
 		// 	num = std::to_string(numSpecular++);
 		// }
-    texture_bind(&(mesh->textures[i]));
 
     texture_unit(&(mesh->textures[i]), shader, tex0, i);
     texture_bind(&(mesh->textures[i]));
-
 	}
+
 	// Take care of the camera Matrix
 	glUniform3f(
     glGetUniformLocation(shader->ID, "camPos"),
