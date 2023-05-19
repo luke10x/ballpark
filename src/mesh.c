@@ -6,7 +6,7 @@ mesh_t* mesh_create(
   GLsizei vertex_count,
   GLuint* indices,
   GLsizei index_count,
-  texture_t* textures,
+  texture_t** textures,
   GLsizei texture_count
 ) {
   if (textures == NULL) {
@@ -45,7 +45,26 @@ mesh_t* mesh_create(
   mesh->indices = indices;
   mesh->index_count = index_count;
 
-  mesh->textures = textures;
+  // Probably it makes more sense that it is allready packed to textures blob
+  // Texture Array Pointer (texture_t**) should not be used,
+  // Texture Object Array (texture*) should be used instead.
+  // texture* can be looped using indexing syntax with the address-of operator
+  if (textures != NULL) {
+    mesh->textures = (texture_t*)malloc(4 * sizeof(texture_t));
+    mesh->textures = textures[0];
+    if (textures[1] != NULL) {
+      texture_t* addr = &(mesh->textures[1]);
+      memcpy(addr,  textures + sizeof(textures), sizeof(texture_t));
+    }
+    if (textures[2] != NULL) {
+      texture_t* addr = &(mesh->textures[2]);
+      memcpy(addr,  textures + 2*sizeof(textures), sizeof(texture_t));
+    }
+    if (textures[3] != NULL) {
+      texture_t* addr = &(mesh->textures[3]);
+      memcpy(addr,  textures + 3*sizeof(textures), sizeof(texture_t));
+    }
+  }
   mesh->texture_count = texture_count;
 
   mesh->vao = vao_create();
@@ -80,6 +99,13 @@ void mesh_draw(mesh_t* mesh, shader_t* shader, camera_t* camera) {
 
 	for (unsigned int i = 0; i < mesh->texture_count; i++)
 	{
+    char* tex0;
+    if (i == 0) {
+      tex0 = "tex0[0]";
+    }
+    if (i == 1) {
+      tex0 = "tex0[1]";
+    }
 		// std::string num;
 		// std::string type = textures[i].type;
 		// if (type == "diffuse")
@@ -90,7 +116,9 @@ void mesh_draw(mesh_t* mesh, shader_t* shader, camera_t* camera) {
 		// {
 		// 	num = std::to_string(numSpecular++);
 		// }
-    texture_unit(&(mesh->textures[i]), shader, "tex0", i);
+    texture_bind(&(mesh->textures[i]));
+
+    texture_unit(&(mesh->textures[i]), shader, tex0, i);
     texture_bind(&(mesh->textures[i]));
 
 	}

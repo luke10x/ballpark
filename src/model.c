@@ -66,7 +66,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   int mesh_added = 0;
 
   texture_t* current_texture = NULL; 
-
+  texture_t** all_textures = malloc(sizeof(texture_t) * 4);
   while (!feof(file)) {
       char line[128];
       if (!fgets(line, 128, file)) break;
@@ -97,11 +97,13 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         // If we start an object, and there is an object already
         // then we need to create a mesh first
         if (offset < b_count) {
+
+          all_textures[0] = current_texture;
           mesh_t* new_mesh = mesh_create(
             O[o_count].name,
             &(B[offset]), (b_count - offset) * sizeof(vertex_t),
             &(I[offset]), (b_count - offset) * sizeof(GLuint),
-            current_texture, 1
+            all_textures, 1
           );
 
           buffers[mesh_added] = new_mesh;
@@ -176,12 +178,15 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   }
   fclose(file);
 
+
+
+  all_textures[0] = current_texture;
   // Last mesh in the file
   mesh_t* new_mesh = mesh_create(
     O[o_count].name,
     &(B[offset]), (b_count - offset) * sizeof(vertex_t),
     &(I[offset]), (b_count - offset) * sizeof(GLuint),
-    current_texture, 1
+    all_textures, 1
   );
 
   buffers[mesh_added] = new_mesh;

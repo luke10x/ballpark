@@ -29,7 +29,7 @@ mesh_t* mesh_create(
   GLsizei vertex_count,
   GLuint* indices,
   GLsizei index_count,
-  texture_t* textures,
+  texture_t** textures,
   GLsizei texture_count
 );
 

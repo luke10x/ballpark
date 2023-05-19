@@ -27,18 +27,23 @@ texture_t* texture_create(
   glActiveTexture(slot);
   glBindTexture(self->type, self->ID);
 
-  glTexParameteri(tex_type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(tex_type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(tex_type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(tex_type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(self->type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(self->type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(self->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(self->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  glTexImage2D(tex_type, 0, GL_RGB, widthImg, heightImg, 0,
+  glTexImage2D(self->type, 0, GL_RGB, widthImg, heightImg, 0,
     GL_RGB, GL_UNSIGNED_BYTE, bytes);
-  glGenerateMipmap(tex_type);
+  glGenerateMipmap(self->type);
     
   free(material->pixels);
   free(material);
-  glBindTexture(tex_type, 0);
+
+  // The following line should be uncommented
+  glBindTexture(self->type, 0);
+
+  // Should work without this
+  glBindTexture(self->type, self->ID);
 
   return self;
 }
