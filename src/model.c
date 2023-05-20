@@ -54,8 +54,8 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   int offset =0; 
   int mesh_added = 0;
+  int tex_idx = 0;
 
-  texture_t* current_texture = NULL; 
   texture_t** all_textures = malloc(sizeof(texture_t) * 4);
 
 
@@ -90,12 +90,12 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         // then we need to create a mesh first
         if (offset < b_count) {
 
-          all_textures[0] = current_texture;
+          // all_textures[0] = current_texture;
           mesh_t* new_mesh = mesh_create(
             O[o_count].name,
             &(B[offset]), (b_count - offset) * sizeof(vertex_t),
             &(I[offset]), (b_count - offset) * sizeof(GLuint),
-            all_textures, 1
+            all_textures, tex_idx
           );
 
           buffers[mesh_added] = new_mesh;
@@ -105,6 +105,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         }
 
         o_count++;
+        tex_idx = 0;
 
         // Extract name from second character of the line
         int nameLength = strlen(line) - 2;
@@ -121,12 +122,21 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
          // Skip "usemtl " prefix
         int nameLength = strlen(line) - 7;
         char* filename = strndup(line + 7,  strlen(line + 7) - 1);
+        printf("txidx=%d\n", tex_idx);
 
         // TODO Optimize, do not load pixes of already loaded files
-        current_texture = texture_create(
+
+        GLuint slt = GL_TEXTURE0 ;
+        if (tex_idx == 1) { slt = GL_TEXTURE1; }
+        if (tex_idx == 2) { slt = GL_TEXTURE2; }
+        if (tex_idx == 3) { slt = GL_TEXTURE3; }
+    
+        all_textures[tex_idx] = texture_create(
           filename,
-          GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
+          GL_TEXTURE_2D, slt, GL_RGB, GL_UNSIGNED_BYTE
         );
+
+        tex_idx++;
       }
 
       // Finally faces 
@@ -140,7 +150,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v1 - 1].x, V[v1 - 1].y,  V[v1 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
-          .tex_id=0,
+          .tex_id=tex_idx - 1,
           .normal = { VN[vn1 - 1].x, VN[vn1 - 1].y, VN[vn1 - 1].z}
         };
         I[b_count] = b_count - offset;
@@ -151,6 +161,8 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v2 - 1].x, V[v2 - 1].y,  V[v2 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v },
+                    .tex_id=tex_idx - 1,
+
           .normal = { VN[vn2 - 1].x, VN[vn2 - 1].y, VN[vn2 - 1].z}
         };
         I[b_count] = b_count - offset;
@@ -161,6 +173,8 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v3 - 1].x, V[v3 - 1].y,  V[v3 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt3 - 1].u, VT[vt3 - 1].v },
+                    .tex_id=tex_idx - 1 ,
+
           .normal = { VN[vn3 - 1].x, VN[vn3 - 1].y, VN[vn3 - 1].z
           }
         };
@@ -172,13 +186,15 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
 
 
-  all_textures[0] = current_texture;
+  // all_textures[0] = current_texture;
   // Last mesh in the file
+        printf("last txidx=%d\n", tex_idx);
+
   mesh_t* new_mesh = mesh_create(
     O[o_count].name,
     &(B[offset]), (b_count - offset) * sizeof(vertex_t),
     &(I[offset]), (b_count - offset) * sizeof(GLuint),
-    all_textures, 1
+    all_textures, tex_idx
   );
 
   buffers[mesh_added] = new_mesh;

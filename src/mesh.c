@@ -100,12 +100,10 @@ void mesh_draw(mesh_t* mesh, shader_t* shader, camera_t* camera) {
 	for (unsigned int i = 0; i < mesh->texture_count; i++)
 	{
     char* tex0;
-    if (i == 0) {
-      tex0 = "tex0[0]";
-    }
-    if (i == 1) {
-      tex0 = "tex0[1]";
-    }
+    if (i == 0) { tex0 = "tex0[0]"; }
+    if (i == 1) { tex0 = "tex0[1]"; }
+    if (i == 2) { tex0 = "tex0[2]"; }
+    if (i == 3) { tex0 = "tex0[3]"; }
 		// std::string num;
 		// std::string type = textures[i].type;
 		// if (type == "diffuse")
