@@ -211,7 +211,11 @@ model_t* model_create(char* name) {
 
   self->meshes = malloc(sizeof(mesh_t) * 50);
 
-  int num_buffers = buffers_load_from_file("assets/obj/cube.obj", self->meshes);
+
+  char fullname[30];
+  sprintf(fullname, "assets/obj/%s.obj", name);
+
+  int num_buffers = buffers_load_from_file(fullname, self->meshes);
   self->mesh_count = num_buffers;
 
   printf("Meshes loaded: %d\n", num_buffers);

@@ -171,8 +171,9 @@ ctx_t* ctx_create() {
 	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)pyramidModel);
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 	glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
-
+  // ctx->subject = model_create("cube");
   ctx->subject = model_create("luke");
+  // ctx->subject = model_create("level-map");
 
 
   glEnable(GL_BLEND);

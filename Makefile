@@ -28,5 +28,7 @@ run: clean esport.app
 .PHONY=clean run
 
 assets/ppm:
-	mkdir -p assets/ppm
+	mkdir -p assets/ppm/alpha
 	mogrify -path assets/ppm -format ppm assets/png/*.png
+	mogrify -path assets/ppm/alpha -format ppm -alpha extract assets/png/*.png
+
