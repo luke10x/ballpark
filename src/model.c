@@ -11,29 +11,12 @@
 #define MAX_FACES 2048
 #define MAX_VERTICES 2048
 
-typedef struct {
-  uint8_t r,g,b;
-} t_pixel;
+typedef struct { float x, y, z; } obj_vertex_t;
+typedef struct { float x, y, z; } obj_normal_t;
+typedef struct { float u, v; }    t_vt; // "texture vertices"
 
-typedef struct {
-  float x, y, z;
-} t_vertex;
-
-typedef struct {
-  float u, v;
-} t_vt;
-
-typedef struct t_object t_object;
-typedef struct t_face t_face;
-
-struct t_face {
-  t_vertex v1, v2, v3;
-  t_vt vt1, vt2, vt3;
-  t_object* obj;
-  ppm_t *m;
-};
-
-struct t_object {
+typedef struct obj_object_t obj_object_t;
+struct obj_object_t {
   char* name;
 };
 
@@ -47,14 +30,21 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
     return 0;
   }
 
-  GLuint*     I = malloc(MAX_FACES     *sizeof(GLuint) * 3);
-  t_object*   O = malloc(MAX_OBJECTS   *sizeof(t_object));
-  ppm_t*      M = malloc(MAX_MATERIALS *sizeof(ppm_t));
-  t_vertex*   V = malloc(MAX_VERTICES  *sizeof(t_vertex));
-  vertex_t*   B = malloc(MAX_VERTICES  *sizeof(vertex_t)); // the real one
-  t_vt*      VT = malloc(MAX_VERTICES  *sizeof(t_vt));
-  vec3*      VN = malloc(MAX_VERTICES  *sizeof(vec3));
+  // To hold data parsed from Wavefront OBJ file
+  ppm_t*         M = malloc(MAX_MATERIALS * sizeof(ppm_t));
+  obj_object_t*  O = malloc(MAX_OBJECTS   * sizeof(obj_object_t));
+  obj_vertex_t*  V = malloc(MAX_VERTICES  * sizeof(obj_vertex_t));
+  t_vt*         VT = malloc(MAX_VERTICES  * sizeof(t_vt));
+  obj_normal_t* VN = malloc(MAX_VERTICES  * sizeof(obj_normal_t));
 
+  // To hold buffers required to create mesh
+  GLuint*        I = malloc(MAX_FACES     * sizeof(GLuint) * 3);
+  vertex_t*      B = malloc(MAX_VERTICES  * sizeof(vertex_t)); // the real one
+
+  // Set initial counts
+  // I don't like that some of them start from -1, some from 0
+  // TODO either make them all start with same, or write 
+  // a very detailed comment as it allways bothers me
   int v_count  = 0;
   int vt_count = 0;
   int vn_count = 0;
@@ -67,6 +57,8 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   texture_t* current_texture = NULL; 
   texture_t** all_textures = malloc(sizeof(texture_t) * 4);
+
+
   while (!feof(file)) {
       char line[128];
       if (!fgets(line, 128, file)) break;
@@ -87,7 +79,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
       // Normals
       else if (line[0] == 'v' && line[1] == 'n') {
-        sscanf(line, "vn %f %f %f", &(VN[vn_count][0]), &(VN[vn_count][1]), &(VN[vn_count][2]));
+        sscanf(line, "vn %f %f %f", &(VN[vn_count].x), &(VN[vn_count].y), &(VN[vn_count].z));
         vn_count++;
       }
 
@@ -149,7 +141,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
           .tex_id=0,
-          .normal = { VN[vn1 - 1][0], VN[vn1 - 1][1], VN[vn1 - 1][2]}
+          .normal = { VN[vn1 - 1].x, VN[vn1 - 1].y, VN[vn1 - 1].z}
         };
         I[b_count] = b_count - offset;
         b_count++;
@@ -159,7 +151,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v2 - 1].x, V[v2 - 1].y,  V[v2 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v },
-          .normal = { VN[vn2 - 1][0], VN[vn2 - 1][1], VN[vn2 - 1][2]}
+          .normal = { VN[vn2 - 1].x, VN[vn2 - 1].y, VN[vn2 - 1].z}
         };
         I[b_count] = b_count - offset;
         b_count++;
@@ -169,7 +161,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
           .position = {V[v3 - 1].x, V[v3 - 1].y,  V[v3 - 1].z},
           .color = { 0.0f, 0.0f, 0.0f },
           .texUV={ VT[vt3 - 1].u, VT[vt3 - 1].v },
-          .normal = { VN[vn3 - 1][0], VN[vn3 - 1][1], VN[vn3 - 1][2]
+          .normal = { VN[vn3 - 1].x, VN[vn3 - 1].y, VN[vn3 - 1].z
           }
         };
         I[b_count] = b_count - offset;
