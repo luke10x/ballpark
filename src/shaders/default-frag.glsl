@@ -35,16 +35,16 @@ void main() {
 	float specular = specAmount * specularLight;
 
 	// outputs final color
-    vec4 color;
-    if (texId == 0.0) {
-        color = texture(tex0[0], texCoord);
-    } else if (texId == 1.0) {
-        color = texture(tex0[1], texCoord);
-    } else if (texId == 2.0) {
-        color = texture(tex0[2], texCoord);
-    } else {
-        color = texture(tex0[3], texCoord);
-    }
+	vec4 color;
+	if (texId == 0.0) {
+		color = texture(tex0[0], texCoord);
+	} else if (texId == 1.0) {
+		color = texture(tex0[1], texCoord);
+	} else if (texId == 2.0) {
+		color = texture(tex0[2], texCoord);
+	} else {
+		color = texture(tex0[3], texCoord);
+	}
 
 	fragColor = color * vec4(vec3(lightColor * (diffuse + ambient + specular)), 1.0f);
 }

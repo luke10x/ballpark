@@ -144,11 +144,11 @@ ctx_t* ctx_create() {
 
   texture_t* wall_pic_tex = texture_create(
     "05-01-wall",
-     GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE
+     GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE
   );
   texture_t* grass_pic_tex = texture_create(
     "17-03-grass",
-     GL_TEXTURE_2D, GL_TEXTURE1, GL_RGB, GL_UNSIGNED_BYTE
+     GL_TEXTURE_2D, GL_TEXTURE1, GL_RGBA, GL_UNSIGNED_BYTE
   );
 
   texture_t** all_popcats = malloc(sizeof(texture_t) * 4);
@@ -171,8 +171,8 @@ ctx_t* ctx_create() {
 	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)pyramidModel);
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 	glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
-  // ctx->subject = model_create("cube");
-  ctx->subject = model_create("luke");
+  ctx->subject = model_create("cube");
+  // ctx->subject = model_create("luke");
   // ctx->subject = model_create("level-map");
 
 

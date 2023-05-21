@@ -21,14 +21,24 @@ clean:
 	rm -f *.out
 	rm -f *.exe
 	rm -f *.app
+	rm -fr assets/ppm
+	rm -fr assets/obj
 
-run: clean esport.app
+run: clean assets/obj assets/ppm esport.app
 	./esport.app
 
 .PHONY=clean run
 
 assets/ppm:
-	mkdir -p assets/ppm/alpha
-	mogrify -path assets/ppm -format ppm assets/png/*.png
-	mogrify -path assets/ppm/alpha -format ppm -alpha extract assets/png/*.png
+	mkdir -p assets/ppm
+	mogrify -path assets/ppm -format ppm -fill "rgb(255,0,255)" -opaque "transparent" assets/png/*.png
+	# mogrify -path assets/ppm/alpha -format ppm -alpha extract assets/png/*.png
 
+assets/obj:
+	mkdir -p assets/obj
+	blender -b assets/level-map.blend -o assets/obj/level-map.obj --python-expr \
+		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/level-map.obj', use_triangles=True)"
+	blender -b assets/luke.blend -o assets/obj/luke.obj --python-expr \
+		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/luke.obj', use_triangles=True)"
+	blender -b assets/cube.blend -o assets/obj/cube.obj --python-expr \
+		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/cube.obj', use_triangles=True)"

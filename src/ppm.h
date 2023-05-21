@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 typedef struct {
-  uint8_t r,g,b;
+  uint8_t r, g, b, a;
 } pixel_t;
 
 typedef struct {

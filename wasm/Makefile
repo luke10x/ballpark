@@ -23,6 +23,8 @@ build:
 		--preload-file ../assets/ppm/30-03-top-block.ppm@assets/ppm/30-03-top-block.ppm \
 		--preload-file ../assets/ppm/15-03-box-top.ppm@assets/ppm/15-03-box-top.ppm \
 		--preload-file ../assets/ppm/steve.ppm@assets/ppm/steve.ppm \
+		--preload-file ../assets/ppm/mapped-skin.ppm@assets/ppm/mapped-skin.ppm \
+		--preload-file ../assets/obj/luke.obj@assets/obj/luke.obj \
 		--preload-file ../assets/obj/cube.obj@assets/obj/cube.obj
 
 clean:

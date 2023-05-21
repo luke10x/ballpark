@@ -14,14 +14,14 @@ texture_t* texture_create(
   texture_t* self = malloc(sizeof(texture_t));
   self->type = tex_type;
 
-  ppm_t* material = malloc(sizeof(ppm_t));
-  ppm_load(image, &material, 1);
+  ppm_t* ppm = malloc(sizeof(ppm_t));
+  ppm_load(image, &ppm, 1);
 
-  int widthImg = material->width;
-  int heightImg = material->height;
+  int widthImg = ppm->width;
+  int heightImg = ppm->height;
   int numColCh = 10;
 
-  unsigned char* bytes = (unsigned char*) material->pixels;
+  unsigned char* bytes = (unsigned char*) ppm->pixels;
 //  printf("pixels %s %dx%d .. \n", bytes,widthImg, heightImg );
   glGenTextures(1, &(self->ID));
   glActiveTexture(slot);
@@ -36,12 +36,12 @@ texture_t* texture_create(
   glTexParameteri(self->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(self->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  glTexImage2D(self->type, 0, GL_RGB, widthImg, heightImg, 0,
-    GL_RGB, GL_UNSIGNED_BYTE, bytes);
+  glTexImage2D(self->type, 0, GL_RGBA, widthImg, heightImg, 0,
+    GL_RGBA, GL_UNSIGNED_BYTE, bytes);
   glGenerateMipmap(self->type);
     
-  free(material->pixels);
-  free(material);
+  free(ppm->pixels);
+  free(ppm);
 
   // Unbind to make suree something else does not interfere
   glBindTexture(self->type, 0);

@@ -87,6 +87,11 @@ void ppm_load(const char* file_basename, ppm_t** result, int flip) {
       pixels[row * width + col].r = buffer[0] * 255 / max_val;
       pixels[row * width + col].g = buffer[1] * 255 / max_val;
       pixels[row * width + col].b = buffer[2] * 255 / max_val;
+      if (buffer[0] == max_val && buffer[1] == 0 && buffer[2] == max_val) {
+        pixels[row * width + col].a = 32;
+      } else {
+        pixels[row * width + col].a = 255;
+      }
       i++;
     }
   }
