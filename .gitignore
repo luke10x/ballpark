@@ -8,3 +8,6 @@
 *.xcf
 /wasm/build/
 /tmp/
+*.dSYM/
+tmp.entitlements
+

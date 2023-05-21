@@ -49,21 +49,10 @@ mesh_t* mesh_create(
   // Texture Array Pointer (texture_t**) should not be used,
   // Texture Object Array (texture*) should be used instead.
   // texture* can be looped using indexing syntax with the address-of operator
-  if (textures != NULL) {
-    mesh->textures = (texture_t*)malloc(4 * sizeof(texture_t));
-    mesh->textures = textures[0];
-    if (textures[1] != NULL) {
-      texture_t* addr = &(mesh->textures[1]);
-      memcpy(addr,  textures[1] , sizeof(texture_t));
-    }
-    if (textures[2] != NULL) {
-      texture_t* addr = &(mesh->textures[2]);
-      memcpy(addr,  textures[2], sizeof(texture_t));
-    }
-    if (textures[3] != NULL) {
-      texture_t* addr = &(mesh->textures[3]);
-      memcpy(addr,  textures[3], sizeof(texture_t));
-    }
+  mesh->textures = (texture_t*)malloc(4 * sizeof(texture_t));
+  for (int i = 0; i < texture_count; i++) {
+    texture_t* addr = &(mesh->textures[i]);
+    memcpy(addr,  textures[i], sizeof(texture_t));
   }
   mesh->texture_count = texture_count;
 
