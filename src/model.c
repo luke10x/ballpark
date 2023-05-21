@@ -5,9 +5,8 @@
 #include "model.h"
 #include "ppm.h"
 
-#define MAX_LINE_SIZE 1024
-#define MAX_MATERIALS 128
-#define MAX_OBJECTS 128
+#define MAX_MATERIALS 256
+#define MAX_OBJECTS 256
 #define MAX_FACES 2048
 #define MAX_VERTICES 2048
 
@@ -122,7 +121,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
          // Skip "usemtl " prefix
         int nameLength = strlen(line) - 7;
         char* filename = strndup(line + 7,  strlen(line + 7) - 1);
-        printf("txidx=%d\n", tex_idx);
+        printf("Loading texture #%d (%s) for %s\n", tex_idx, filename, O[o_count].name);
 
         // TODO Optimize, do not load pixes of already loaded files
 
@@ -139,7 +138,7 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         tex_idx++;
       }
 
-      // Finally faces 
+      // Faces 
       else if (line[0] == 'f' && line[1] == ' ') {
         int v1, vt1, vn1, v2, vt2, vn2, v3, vt3, vn3;
         sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d",
@@ -184,11 +183,8 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   }
   fclose(file);
 
-
-
-  // all_textures[0] = current_texture;
   // Last mesh in the file
-        printf("last txidx=%d\n", tex_idx);
+  printf("Finally texture #%d (%s) for %s\n", tex_idx, filename, O[o_count].name);
 
   mesh_t* new_mesh = mesh_create(
     O[o_count].name,

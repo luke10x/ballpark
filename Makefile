@@ -3,7 +3,7 @@
 #
 esport.app:
 
-	gcc \
+	gcc -g \
 	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
 	-o esport.app \
@@ -21,8 +21,8 @@ clean:
 	rm -f *.out
 	rm -f *.exe
 	rm -f *.app
-	rm -fr assets/ppm
-	rm -fr assets/obj
+	# rm -fr assets/ppm
+	# rm -fr assets/obj
 
 run: clean assets/obj assets/ppm esport.app
 	./esport.app
