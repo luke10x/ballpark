@@ -2,12 +2,7 @@
 #include <cglm/cglm.h>
 #include <math.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#endif
-#ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#endif
+#include "gl.h"
 
 #include "camera.h"
 #include "shader.h"

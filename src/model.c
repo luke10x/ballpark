@@ -129,6 +129,10 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         if (tex_idx == 1) { slt = GL_TEXTURE1; }
         if (tex_idx == 2) { slt = GL_TEXTURE2; }
         if (tex_idx == 3) { slt = GL_TEXTURE3; }
+        if (tex_idx > 3) {
+          fprintf(stderr, "More then 4 textures detexted!");
+          exit(1);
+        }
     
         all_textures[tex_idx] = texture_create(
           filename,

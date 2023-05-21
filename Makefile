@@ -2,7 +2,6 @@
 # Desktop application build
 #
 esport.app:
-
 	gcc -g \
 	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
@@ -16,11 +15,22 @@ esport.app:
 	-lglfw -lglew -framework CoreVideo -framework OpenGL -framework GLUT \
 	-framework IOKit -framework Cocoa -framework Carbon
 
+esport.elf:
+	gcc -g \
+	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
+	src/texture.c src/shader.c src/esport.c \
+	-o esport.elf \
+	-DGL_SILENCE_DEPRECATION \
+	-I./include \
+	-I./usr/include \
+	-lGL -lGLU -lglut -lglfw -lrt -ldl -lm -lcglm
+
 clean:
 	rm -f tmp/*.o
 	rm -f *.out
 	rm -f *.exe
 	rm -f *.app
+	rm -f *.elf
 	# rm -fr assets/ppm
 	# rm -fr assets/obj
 

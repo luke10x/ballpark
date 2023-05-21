@@ -3,14 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#include<GLFW/glfw3.h>
-#endif
+
+#include "gl.h"
 
 #ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <emscripten.h>
 #endif
 

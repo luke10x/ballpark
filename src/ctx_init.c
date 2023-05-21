@@ -1,10 +1,6 @@
 #include <stdio.h>
 
-#ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#else
-#include <OpenGL/gl3.h>
-#endif
+#include "gl.h"
 
 #include <GLFW/glfw3.h>
 

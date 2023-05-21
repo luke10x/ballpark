@@ -1,12 +1,6 @@
 #pragma once
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#endif
-
-#ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#endif
+#include "gl.h"
 
 #include <cglm/cglm.h>
 

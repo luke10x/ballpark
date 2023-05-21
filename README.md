@@ -30,6 +30,15 @@ Libraries need to be installed:
     brew install glew
     brew install cglm
 
+## Native building on Debian
+
+    sudo apt install \
+        build-essential git blender imagemagick \
+        libcglm-dev libglew-dev libglfw3-dev freeglut3-dev \
+        mesa-common-dev libglu1-mesa-dev
+
+# Running
+
 Then compile desktop application with:
 
     make clean esport.app
