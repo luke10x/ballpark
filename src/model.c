@@ -7,8 +7,8 @@
 
 #define MAX_MATERIALS 256
 #define MAX_OBJECTS 256
-#define MAX_FACES 2048
-#define MAX_VERTICES 2048
+#define MAX_FACES 4096
+#define MAX_VERTICES 4096
 
 typedef struct { float x, y, z; } obj_vertex_t;
 typedef struct { float x, y, z; } obj_normal_t;
@@ -202,6 +202,9 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   free(VT);
   free(V);
+
+  printf("Stats\n V=%d\n VT=%d\n VN=%d\n O=%d\n M=%d\n B=%d\n",
+      v_count, vt_count, vn_count, o_count, m_count, b_count);
 
   return mesh_added;
 }
