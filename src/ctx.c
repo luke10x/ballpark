@@ -146,7 +146,6 @@ ctx_t* ctx_create() {
     "17-03-grass",
      GL_TEXTURE_2D, GL_TEXTURE1, GL_RGBA, GL_UNSIGNED_BYTE
   );
-
   texture_t** all_popcats = malloc(sizeof(texture_t) * 4);
   all_popcats[0] = wall_pic_tex;
   all_popcats[1] = grass_pic_tex;
@@ -167,9 +166,9 @@ ctx_t* ctx_create() {
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
   glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
-  ctx->subject = model_create("cube");
+  // ctx->subject = model_create("cube");
   // ctx->subject = model_create("luke");
-  // ctx->subject = model_create("level-map");
+  ctx->subject = model_create("level-map");
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
