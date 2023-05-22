@@ -7,8 +7,8 @@
 #include <time.h>
 
 #include "gl.h"
-
 #include <GLFW/glfw3.h>
+
 #include <cglm/cglm.h>
 
 #include "buffers.h"
@@ -157,16 +157,15 @@ ctx_t* ctx_create() {
     indices,  sizeof(indices),
     all_popcats, 2
   );
+
 	shader_activate(ctx->light_shader);
 	glUniformMatrix4fv(glGetUniformLocation(ctx->light_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)lightModel);
-	glUniform4f(glGetUniformLocation(ctx->light_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
-  texture_unit(all_popcats[0], ctx->default_shader, "tex0[0]", GL_TEXTURE0);
-  texture_unit(all_popcats[1], ctx->default_shader, "tex0[1]", GL_TEXTURE1);
+  glUniform4f(glGetUniformLocation(ctx->light_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 
   shader_activate(ctx->default_shader);
 	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)pyramidModel);
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
-	glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
+  glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
   ctx->subject = model_create("cube");
   // ctx->subject = model_create("luke");
