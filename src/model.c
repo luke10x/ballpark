@@ -57,12 +57,11 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
   texture_t** all_textures = malloc(sizeof(texture_t) * 4);
 
-
   while (!feof(file)) {
       char line[128];
       if (!fgets(line, 128, file)) break;
 
-      // Vertices
+      // Vertices (Not our vertices, OBJ vertices, of course)
       if (line[0] == 'v' && line[1] == ' ') {
           sscanf(line, "v %f %f %f",
             &(V[v_count].x), &(V[v_count].y), &(V[v_count].z));
@@ -89,17 +88,21 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
         // then we need to create a mesh first
         if (offset < b_count) {
 
-          // all_textures[0] = current_texture;
+          vertex_t* vertices = &(B[offset]);
+          GLsizei vertex_count = b_count - offset;
+          GLuint* indices =  &(I[offset]);
+          GLsizei index_count = b_count - offset;
+
           mesh_t* new_mesh = mesh_create(
             O[o_count].name,
-            &(B[offset]), (b_count - offset) * sizeof(vertex_t),
-            &(I[offset]), (b_count - offset) * sizeof(GLuint),
+            vertices, vertex_count,
+            indices,  index_count,
             all_textures, tex_idx
           );
 
           buffers[mesh_added] = new_mesh;
-
           mesh_added++;
+
           offset = b_count;
         }
 
@@ -150,36 +153,33 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
 
         // vertex 1
         B[b_count] = (vertex_t){
-          .position = {V[v1 - 1].x, V[v1 - 1].y,  V[v1 - 1].z},
-          .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt1 - 1].u, VT[vt1 - 1].v },
-          .tex_id=tex_idx - 1,
-          .normal = { VN[vn1 - 1].x, VN[vn1 - 1].y, VN[vn1 - 1].z}
+          .position = { V[v1 - 1].x, V[v1 - 1].y,  V[v1 - 1].z },
+          .color    = { 0.0f, 0.0f, 0.0f },
+          .texUV    = { VT[vt1 - 1].u, VT[vt1 - 1].v },
+          .tex_id   = tex_idx - 1,
+          .normal   = { VN[vn1 - 1].x, VN[vn1 - 1].y, VN[vn1 - 1].z }
         };
         I[b_count] = b_count - offset;
         b_count++;
 
         // vertex 2
         B[b_count] = (vertex_t){
-          .position = {V[v2 - 1].x, V[v2 - 1].y,  V[v2 - 1].z},
-          .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt2 - 1].u, VT[vt2 - 1].v },
-                    .tex_id=tex_idx - 1,
-
-          .normal = { VN[vn2 - 1].x, VN[vn2 - 1].y, VN[vn2 - 1].z}
+          .position = { V[v2 - 1].x, V[v2 - 1].y,  V[v2 - 1].z },
+          .color    = { 0.0f, 0.0f, 0.0f },
+          .texUV    = { VT[vt2 - 1].u, VT[vt2 - 1].v },
+          .tex_id   = tex_idx - 1,
+          .normal   = { VN[vn2 - 1].x, VN[vn2 - 1].y, VN[vn2 - 1].z }
         };
         I[b_count] = b_count - offset;
         b_count++;
 
         // vertex 3
         B[b_count] = (vertex_t){
-          .position = {V[v3 - 1].x, V[v3 - 1].y,  V[v3 - 1].z},
-          .color = { 0.0f, 0.0f, 0.0f },
-          .texUV={ VT[vt3 - 1].u, VT[vt3 - 1].v },
-                    .tex_id=tex_idx - 1 ,
-
-          .normal = { VN[vn3 - 1].x, VN[vn3 - 1].y, VN[vn3 - 1].z
-          }
+          .position = { V[v3 - 1].x, V[v3 - 1].y,  V[v3 - 1].z },
+          .color    = { 0.0f, 0.0f, 0.0f },
+          .texUV    = { VT[vt3 - 1].u, VT[vt3 - 1].v },
+          .tex_id   = tex_idx - 1 ,
+          .normal = { VN[vn3 - 1].x, VN[vn3 - 1].y, VN[vn3 - 1].z }
         };
         I[b_count] = b_count - offset;
         b_count++;
@@ -190,18 +190,26 @@ int buffers_load_from_file(const char* filename, mesh_t** buffers) {
   // Last mesh in the file
   printf("Finally texture #%d (%s) for %s\n", tex_idx, filename, O[o_count].name);
 
+  vertex_t* vertices = &(B[offset]);
+  GLsizei vertex_count = b_count - offset;
+  GLuint* indices =  &(I[offset]);
+  GLsizei index_count = b_count - offset;
+
   mesh_t* new_mesh = mesh_create(
     O[o_count].name,
-    &(B[offset]), (b_count - offset) * sizeof(vertex_t),
-    &(I[offset]), (b_count - offset) * sizeof(GLuint),
+    vertices, vertex_count,
+    indices,  index_count,
     all_textures, tex_idx
   );
 
   buffers[mesh_added] = new_mesh;
   mesh_added++;
 
-  free(VT);
+  free(M);
+  free(O);
   free(V);
+  free(VT);
+  free(VN);
 
   printf("Stats\n V=%d\n VT=%d\n VN=%d\n O=%d\n M=%d\n B=%d\n",
       v_count, vt_count, vn_count, o_count, m_count, b_count);
@@ -213,7 +221,6 @@ model_t* model_create(char* name) {
   model_t* self = malloc(sizeof(model_t));
 
   self->meshes = malloc(sizeof(mesh_t) * 50);
-
 
   char fullname[30];
   sprintf(fullname, "assets/obj/%s.obj", name);

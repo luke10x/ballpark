@@ -133,8 +133,8 @@ ctx_t* ctx_create() {
 
   ctx->lamp = mesh_create(
     "light",
-    lightVertices, 352,
-    lightIndices,  144,
+    lightVertices, sizeof(lightVertices) / sizeof(vertex_t),
+    lightIndices,  sizeof(lightIndices) / sizeof(GLuint),
     NULL, 0
   );
 
@@ -152,8 +152,8 @@ ctx_t* ctx_create() {
 
   ctx->pyramid = mesh_create(
     "pyram",
-    vertices, sizeof(vertices),
-    indices,  sizeof(indices),
+    vertices, sizeof(vertices) / sizeof(vertex_t),
+    indices,  sizeof(indices) / sizeof(GLuint),
     all_popcats, 2
   );
 

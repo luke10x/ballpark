@@ -13,26 +13,6 @@ mesh_t* mesh_create(
     printf("texture not set while trying to create mesh for \"%s\"\n", name);
   }
 
-#ifdef DEBUG
-  printf("Creating mesh \"%s\" with vertices:\n", name);
-  for (int i = 0; i < vertex_count/ sizeof(vertex_t); i++) {
-      vertex_t* vert = &(vertices[i]);
-      printf(" { .position = {%.3f, %.3f,  %.3f}, .color = { %.3f, %.3f,  %.3f}, .texUV={ %.3f, %.3f }, .normal = {%.3f, %.3f,  %.3f}},\n",
-        vert->position[0], vert->position[1], vert->position[2],
-        vert->color[0], vert->color[1], vert->color[2],
-        vert->texUV[0], vert->texUV[1],
-        vert->normal[0], vert->normal[1], vert->normal[2]
-      );
-  }
-
-  printf("  with indices: [ ");
-  for (int i = 0; i < index_count/ sizeof(GLuint); i++) {
-    GLuint idx = (indices[i]);
-    printf("%d, ", idx);
-  }
-  printf("];\n");
-#endif
-
   mesh_t* mesh = malloc(sizeof(mesh_t));
 
   // TODO copy vertices and indices, becuase it is owned by outside code,
@@ -60,8 +40,8 @@ mesh_t* mesh_create(
 
   vao_bind(mesh->vao);
 
-  vbo_t* vbo = vbo_create(mesh->vertices, mesh->vertex_count);
-  ebo_t* ebo = ebo_create(mesh->indices, mesh->index_count);
+  vbo_t* vbo = vbo_create(mesh->vertices, mesh->vertex_count * sizeof(vertex_t));
+  ebo_t* ebo = ebo_create(mesh->indices,  mesh->index_count  * sizeof(GLuint));
 
 	// Links VBO attributes such as coordinates and colors to VAO
 	vao_link_attrib(mesh->vao, vbo, 0, 3, GL_FLOAT, sizeof(vertex_t), (void*)0);                   // position
@@ -118,10 +98,5 @@ void mesh_draw(mesh_t* mesh, shader_t* shader, camera_t* camera) {
   camera_matrix(camera, shader, "camMatrix");
   vao_bind(mesh->vao);
 
-
-// printf("incnt: %lu\n", mesh->index_count);
-	// Draw the actual mesh
-
-// printf("NEW to draw about %d triangles\n", mesh->index_count / sizeof(GLuint));
-	glDrawElements(GL_TRIANGLES, mesh->index_count / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mesh->index_count, GL_UNSIGNED_INT, 0);
 }
