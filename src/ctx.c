@@ -25,11 +25,19 @@ typedef struct {
   GLFWwindow* window;
   shader_t* default_shader;
   shader_t* light_shader;
+  shader_t* sky_shader;
 
   mesh_t* pyramid;
+  mat4 pyramidModel;
+
   mesh_t* lamp;
+  model_t* sky;
 
   model_t* subject;
+  mat4 subjectModel;
+
+  model_t* map;
+  mat4 mapModel;
 
   camera_t* camera;
 } ctx_t;
@@ -51,6 +59,7 @@ ctx_t* ctx_create() {
 
   ctx->default_shader = shader_create("src/shaders/default-vert.glsl", "src/shaders/default-frag.glsl");
   ctx->light_shader = shader_create("src/shaders/light-vert.glsl", "src/shaders/light-frag.glsl");
+  ctx->sky_shader = shader_create("src/shaders/default-vert.glsl", "src/shaders/sky-frag.glsl");
 
   // Vertices coordinates
   vertex_t vertices[] =
@@ -116,19 +125,29 @@ ctx_t* ctx_create() {
   glm_vec4_copy((vec4){ 1.0f, 1.0f, 1.0f, 0.5f }, lightColor);
 
   vec3 lightPos;
-	glm_vec3_copy((vec3){ 0.5f, 0.5f, 0.5f }, lightPos);
+	glm_vec3_copy((vec3){ 35.0f, 35.0f, 0.5f }, lightPos);
 	mat4 lightModel = GLM_MAT4_IDENTITY_INIT;
   glm_translate(lightModel, lightPos);
 
 	vec3 pyramidPos;
   glm_vec3_copy((vec3){ -1.0f, 0.0f, -1.0f }, pyramidPos);
-	mat4 pyramidModel = GLM_MAT4_IDENTITY_INIT;
-	glm_translate(pyramidModel, pyramidPos);
+  glm_mat4_copy((mat4)GLM_MAT4_IDENTITY_INIT, ctx->pyramidModel);
+	glm_translate(ctx->pyramidModel, pyramidPos);
 
-  // vec3 subjectPos;
-  // glm_vec3_copy((vec3){ -1.0f, 0.0f, -1.0f }, subjectPos);
-	// mat4 subjectModel = GLM_MAT4_IDENTITY_INIT;
-	// glm_translate(subjectModel,subjectPos);
+	vec3 mapPos;
+  glm_vec3_copy((vec3){ -1.0f, 0.0f, -1.0f }, mapPos);
+  glm_mat4_copy((mat4)GLM_MAT4_IDENTITY_INIT, ctx->mapModel);
+	glm_translate(ctx->mapModel, mapPos);
+
+	vec3 subjectPos;
+  glm_vec3_copy((vec3){ 2.0f, 0.0f, -3.0f }, subjectPos);
+  glm_mat4_copy((mat4)GLM_MAT4_IDENTITY_INIT, ctx->subjectModel);
+	glm_translate(ctx->subjectModel, subjectPos);
+
+	vec3 skyPos;
+  glm_vec3_copy((vec3){ 0.0f, 0.0f, 0.0f }, skyPos);
+	mat4 skyModel = GLM_MAT4_IDENTITY_INIT;
+	glm_translate(skyModel, skyPos);
 
 
   ctx->lamp = mesh_create(
@@ -162,13 +181,20 @@ ctx_t* ctx_create() {
   glUniform4f(glGetUniformLocation(ctx->light_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
 
   shader_activate(ctx->default_shader);
-	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)pyramidModel);
+	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)ctx->pyramidModel);
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
   glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
+  shader_activate(ctx->sky_shader);
+	glUniformMatrix4fv(glGetUniformLocation(ctx->sky_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)skyModel);
+	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
+  glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
+
+  ctx->subject = model_create("luke");
   // ctx->subject = model_create("cube");
-  // ctx->subject = model_create("luke");
-  ctx->subject = model_create("level-map");
+  ctx->map = model_create("level-map");
+  ctx->sky = model_create("sky");
+
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -178,8 +204,7 @@ ctx_t* ctx_create() {
   glfwGetFramebufferSize(ctx->window, &w, &h);
   glViewport(0, 0, w, h);
 
-  ctx->camera = camera_create(w, h, (vec3){0.0f, 0.0f, 2.0f});
-
+  ctx->camera = camera_create(w, h, (vec3){2.0f, 1.8f, 3.0f});
 
   return ctx;
 }
@@ -254,14 +279,26 @@ inline static void ctx_advance_state(ctx_t* ctx) {
 
 inline static void ctx_render(ctx_t* ctx) {
     // Specify the color of the background
+
     glClearColor(0.4f, 0.33f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    mesh_draw(ctx->pyramid, ctx->default_shader, ctx->camera);
     mesh_draw(ctx->lamp,    ctx->light_shader,   ctx->camera);
 
+    shader_activate(ctx->default_shader);
+
+  	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)ctx->pyramidModel);
+    mesh_draw(ctx->pyramid, ctx->default_shader, ctx->camera);
+
+
+  	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)ctx->mapModel);
+    model_draw(ctx->map,     ctx->default_shader, ctx->camera);
+
+  	glUniformMatrix4fv(glGetUniformLocation(ctx->default_shader->ID, "model"), 1, GL_FALSE, (GLfloat*)ctx->subjectModel);
     model_draw(ctx->subject, ctx->default_shader, ctx->camera);
+
+    model_draw(ctx->sky,     ctx->sky_shader,     ctx->camera);
 
     // Swap the back buffer with the front buffer
     glfwSwapBuffers(ctx->window);

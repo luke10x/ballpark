@@ -42,6 +42,7 @@ run: clean assets/obj assets/ppm esport.app
 assets/ppm:
 	mkdir -p assets/ppm
 	mogrify -path assets/ppm -format ppm -fill "rgb(255,0,255)" -opaque "transparent" assets/png/*.png
+	mogrify -path assets/ppm -format ppm assets/jpg/*.jpg
 	# mogrify -path assets/ppm/alpha -format ppm -alpha extract assets/png/*.png
 
 assets/obj:
@@ -52,3 +53,5 @@ assets/obj:
 		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/luke.obj', use_triangles=True)"
 	blender -b assets/cube.blend -o assets/obj/cube.obj --python-expr \
 		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/cube.obj', use_triangles=True)"
+	blender -b assets/sky.blend -o assets/obj/sky.obj --python-expr \
+		"import bpy; bpy.ops.export_scene.obj(filepath='assets/obj/sky.obj', use_triangles=True)"

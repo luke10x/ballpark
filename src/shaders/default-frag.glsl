@@ -28,10 +28,10 @@ void main() {
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
 
 	// specular lighting
-	float specularLight = 0.5f;
+	float specularLight = 0.3f;
 	vec3 viewDirection = normalize(camPos - crntPos);
 	vec3 reflectionDirection = reflect(-lightDirection, normal);
-	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8.0);
+	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 4.0);
 	float specular = specAmount * specularLight;
 
 	// outputs final color

@@ -16,9 +16,11 @@ build:
     --preload-file ../src/shaders/light-frag.glsl@src/shaders/light-frag.glsl \
     --preload-file ../src/shaders/default-vert.glsl@src/shaders/default-vert.glsl \
     --preload-file ../src/shaders/default-frag.glsl@src/shaders/default-frag.glsl \
+    --preload-file ../src/shaders/sky-frag.glsl@src/shaders/sky-frag.glsl \
 		--preload-file ../assets/ppm/steve.ppm@assets/ppm/steve.ppm \
 		--preload-file ../assets/ppm/test.ppm@assets/ppm/test.ppm \
 		--preload-file ../assets/ppm/text.ppm@assets/ppm/text.ppm \
+		--preload-file ../assets/ppm/aya-napa.ppm@assets/ppm/aya-napa.ppm \
 		--preload-file ../assets/ppm/mapped-skin.ppm@assets/ppm/mapped-skin.ppm \
 		--preload-file ../assets/ppm/02-04-wall.ppm@assets/ppm/02-04-wall.ppm \
 		--preload-file ../assets/ppm/04-12-wall.ppm@assets/ppm/04-12-wall.ppm \
@@ -34,6 +36,7 @@ build:
 		--preload-file ../assets/ppm/30-03-top-block.ppm@assets/ppm/30-03-top-block.ppm \
 		--preload-file ../assets/ppm/30-03-ground-with-grass-on-top.ppm@assets/ppm/30-03-ground-with-grass-on-top.ppm \
 		--preload-file ../assets/ppm/31-03-ground.ppm@assets/ppm/31-03-ground.ppm \
+		--preload-file ../assets/obj/sky.obj@assets/obj/sky.obj \
 		--preload-file ../assets/obj/luke.obj@assets/obj/luke.obj \
 		--preload-file ../assets/obj/level-map.obj@assets/obj/level-map.obj \
 		--preload-file ../assets/obj/cube.obj@assets/obj/cube.obj
