@@ -1,4 +1,5 @@
 *.exe
+*.elf
 *.app
 *.blend1
 *.ppm

@@ -23,7 +23,7 @@ esport.elf:
 	-DGL_SILENCE_DEPRECATION \
 	-I./include \
 	-I./usr/include \
-	-lGL -lGLU -lglut -lglfw -lrt -ldl -lm -lcglm
+	-lGL -lGLEW -lglfw -lrt -ldl -lm -lcglm
 
 clean:
 	rm -f tmp/*.o

@@ -79,7 +79,13 @@ void _print_compile_errors(unsigned int shader, int isProgram)
 GLuint _loadShader(GLenum type, const char *source)
 {
   // create shader
+  GLenum error;
+  printf("errorrs so far:\n");
+  while ((error = glGetError()) != GL_NO_ERROR){
+	  printf("gl error %d\n", error);
+  }
   GLuint shader = glCreateShader(type);
+  fprintf(stdout, "shader will be created: %s\n", source);
   if (shader == 0)
   {
     fprintf(stderr, "Error creating shader\n");
