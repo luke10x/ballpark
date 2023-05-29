@@ -1,5 +1,8 @@
 #pragma once
 
+#include "buffers.h"
+#include "texture.h"
+
 #define MAX_O_LISTENERS 4
 
 typedef void (*on_o_load_func)(

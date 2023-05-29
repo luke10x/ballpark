@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "mesh.h"
 #include "model.h"
+#include "objloader.h"
 
 #include "ctx_init.c"
 
@@ -190,10 +191,23 @@ ctx_t* ctx_create() {
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
   glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
-  ctx->subject = model_create("luke");
-  // ctx->subject = model_create("cube");
-  ctx->map = model_create("level-map");
-  ctx->sky = model_create("sky");
+  // Load character
+  ctx->subject = model_create("luke-model");
+  objloader_t* subject_loader = objloader_create("luke");
+  objloader_register_o_listener(subject_loader, ctx->subject, (on_o_load_func*)&model_load_mesh);
+  objloader_load(subject_loader);
+
+  // Load level map
+  ctx->map = model_create("map-model");
+  objloader_t* map_loader = objloader_create("level-map");
+  objloader_register_o_listener(map_loader, ctx->map, (on_o_load_func*)&model_load_mesh);
+  objloader_load(map_loader);
+
+  // load sky
+  ctx->sky = model_create("sky-model");
+  objloader_t* sky_loader = objloader_create("sky");
+  objloader_register_o_listener(sky_loader, ctx->sky, (on_o_load_func*)&model_load_mesh);
+  objloader_load(sky_loader);
 
 
   glEnable(GL_BLEND);

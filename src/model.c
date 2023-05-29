@@ -8,7 +8,7 @@
 
 #define MAX_MESH_COUNT_PER_MODEL 50
 
-void _model_load_meshes(
+void model_load_mesh(
   model_t* model,
   char* name,
   vertex_t* vertices,
@@ -35,15 +35,19 @@ model_t* model_create(char* name) {
   self->meshes = malloc(sizeof(mesh_t) * MAX_MESH_COUNT_PER_MODEL);
   self->mesh_count = 0;
 
+  // The model is created but the data is not yet loaded.
+  // It has to be loaded before using it.
+  // TODO add check if model is loaded before using it
+  
   // TODO move away this outside of this constuructor,
   // so that is can be shared with physics body constructor
-  objloader_t* loader = objloader_create(name);
-  objloader_register_o_listener(
-    loader,
-    (void*)self,
-    (on_o_load_func*)(&_model_load_meshes)
-  );
-  objloader_load(loader);
+  // objloader_t* loader = objloader_create(name);
+  // objloader_register_o_listener(
+  //   loader,
+  //   (void*)self,
+  //   (on_o_load_func*)(&model_load_mesh)
+  // );
+  // objloader_load(loader);
 
   return self;
 }
