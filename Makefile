@@ -3,6 +3,7 @@
 #
 esport.app:
 	gcc -g \
+	src/objloader.c \
 	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
 	-o esport.app \
@@ -17,6 +18,7 @@ esport.app:
 
 esport.elf:
 	gcc -g \
+	src/objloader.c \
 	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
 	src/texture.c src/shader.c src/esport.c \
 	-o esport.elf \

@@ -85,7 +85,6 @@ GLuint _loadShader(GLenum type, const char *source)
 	  printf("gl error %d\n", error);
   }
   GLuint shader = glCreateShader(type);
-  fprintf(stdout, "shader will be created: %s\n", source);
   if (shader == 0)
   {
     fprintf(stderr, "Error creating shader\n");
