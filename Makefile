@@ -9,7 +9,7 @@ ifeq ($(shell uname), Darwin)
 		-lglfw -lglew -framework CoreVideo -framework OpenGL -framework GLUT \
 		-framework IOKit -framework Cocoa -framework Carbon
 else
-	# C_INCLUDE_PATH := C_INCLUDE_PATHd
+	LIBRARIES := -lstdc++ -lGL -lGLEW -lglfw -lm -lcglm
 endif
 
 ARCH := $(shell uname -m)
@@ -18,6 +18,7 @@ OS := $(shell uname -s)
 TARGET := esport-$(ARCH)-$(OS).app
 
 $(TARGET):
+	mkdir -p ./obj
 	g++ -c src/physics.cpp -o ./obj/physics.o
 
 	gcc -g \
@@ -29,17 +30,6 @@ $(TARGET):
 		-DGL_SILENCE_DEPRECATION \
 		-I$(C_INCLUDE_PATH) \
 		-L$(LIBRARY_PATH) $(LIBRARIES)
-
-esport.elf:
-	gcc -g \
-	src/objloader.c \
-	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
-	src/texture.c src/shader.c src/esport.c \
-	-o esport.elf \
-	-DGL_SILENCE_DEPRECATION \
-	-I./include \
-	-I./usr/include \
-	-lGL -lGLEW -lglfw -lrt -ldl -lm -lcglm
 
 clean:
 	rm -f tmp/*.o
@@ -53,7 +43,8 @@ clean:
 	# rm -fr assets/obj
 
 run: clean assets/obj assets/ppm $(TARGET)
-	read -n 1 -s -r -p "Press any key to continue..."
+	@echo "Press any key..."
+	@dd bs=1 count=1 2>/dev/null
 	./$(TARGET)
 
 .PHONY=clean run
