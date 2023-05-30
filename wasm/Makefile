@@ -3,12 +3,15 @@
 #
 
 build:
-	mkdir -p ./build
+	mkdir -p ../obj
+	em++ -c ../src/physics.cpp -o ../obj/physics.bc.o
 
+	mkdir -p ./build
 	emcc \
 		../src/objloader.c \
 		../src/model.c ../src/camera.c ../src/mesh.c ../src/buffers.c ../src/ppm.c \
 		../src/texture.c ../src/shader.c ../src/esport.c \
+		../obj/physics.bc.o \
 		-o ./build/index.html \
 		-s FULL_ES2=1 -s USE_GLFW=3 -s USE_WEBGL2=1 -O0 \
 		-s ALLOW_MEMORY_GROWTH=1 -s GL_UNSAFE_OPTS=0 \
@@ -44,5 +47,6 @@ build:
 
 clean:
 	rm -fr build/
+	rm -fr ../obj/
 
 .PHONY=clean
