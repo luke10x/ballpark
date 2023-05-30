@@ -29,6 +29,7 @@ Libraries need to be installed:
     brew install glfw
     brew install glew
     brew install cglm
+    brew install bullet
 
 ## Native building on Debian
 

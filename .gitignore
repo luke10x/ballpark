@@ -9,6 +9,7 @@
 *.xcf
 /wasm/build/
 /tmp/
+/obj/
 *.dSYM/
 tmp.entitlements
 

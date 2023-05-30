@@ -18,8 +18,8 @@
 #include "mesh.h"
 #include "model.h"
 #include "objloader.h"
-
 #include "ctx_init.c"
+#include "physics.h"
 
 typedef struct {
   int should_continue;
@@ -191,6 +191,8 @@ ctx_t* ctx_create() {
 	glUniform4f(glGetUniformLocation(ctx->default_shader->ID, "lightColor"), lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
   glUniform3f(glGetUniformLocation(ctx->default_shader->ID, "lightPos"), lightPos[0], lightPos[1], lightPos[2]);
 
+  physics_init();
+  
   // Load character
   ctx->subject = model_create("luke-model");
   objloader_t* subject_loader = objloader_create("luke");

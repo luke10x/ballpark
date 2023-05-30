@@ -1,20 +1,34 @@
 #
 # Desktop application build
 #
-esport.app:
+ifeq ($(shell uname), Darwin)
+	BREW_PREFIX := $(shell brew --prefix)
+  C_INCLUDE_PATH := $(BREW_PREFIX)/include
+	LIBRARY_PATH := $(BREW_PREFIX)/lib
+	LIBRARIES := 	-lstdc++ \
+		-lglfw -lglew -framework CoreVideo -framework OpenGL -framework GLUT \
+		-framework IOKit -framework Cocoa -framework Carbon
+else
+	# C_INCLUDE_PATH := C_INCLUDE_PATHd
+endif
+
+ARCH := $(shell uname -m)
+OS := $(shell uname -s)
+
+TARGET := esport-$(ARCH)-$(OS).app
+
+$(TARGET):
+	g++ -c src/physics.cpp -o ./obj/physics.o
+
 	gcc -g \
-	src/objloader.c \
-	src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
-	src/texture.c src/shader.c src/esport.c \
-	-o esport.app \
-	-DGL_SILENCE_DEPRECATION \
-	-I./include \
-	-I/opt/homebrew/Cellar/cglm/0.8.9/include \
-	-I/opt/homebrew/Cellar/glfw/3.3.8/include \
-	-I/opt/homebrew/Cellar/glew/2.2.0_1/include \
-	-L/opt/homebrew/lib \
-	-lglfw -lglew -framework CoreVideo -framework OpenGL -framework GLUT \
-	-framework IOKit -framework Cocoa -framework Carbon
+		src/objloader.c \
+		src/model.c src/camera.c src/mesh.c src/buffers.c src/ppm.c \
+		src/texture.c src/shader.c src/esport.c \
+		obj/physics.o \
+		-o $(TARGET) \
+		-DGL_SILENCE_DEPRECATION \
+		-I$(C_INCLUDE_PATH) \
+		-L$(LIBRARY_PATH) $(LIBRARIES)
 
 esport.elf:
 	gcc -g \
@@ -33,11 +47,14 @@ clean:
 	rm -f *.exe
 	rm -f *.app
 	rm -f *.elf
+	rm -f obj/*.o
+	rm -rf *.dSYM
 	# rm -fr assets/ppm
 	# rm -fr assets/obj
 
-run: clean assets/obj assets/ppm esport.app
-	./esport.app
+run: clean assets/obj assets/ppm $(TARGET)
+	read -n 1 -s -r -p "Press any key to continue..."
+	./$(TARGET)
 
 .PHONY=clean run
 
