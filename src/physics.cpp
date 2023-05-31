@@ -1,4 +1,6 @@
 #include <iostream>
+// #include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 
 #include "physics.h"
 
@@ -9,7 +11,18 @@
 // Initialize the physics simulation
 void physics_init() {
 
-    std::string message = "PHYSICS INITIALIZED!";
+
+    // Create a dynamic world
+    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
+    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+    // Set gravity
+    dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
+
+    std::string message = "PHYSICS WORLD INITIALIZED!";
     std::cout << message << std::endl;
 }
 

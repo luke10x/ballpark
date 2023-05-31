@@ -1,12 +1,14 @@
 #
 # Desktop application build
 #
+
 ifeq ($(shell uname), Darwin)
-	BREW_PREFIX := $(shell brew --prefix)
-  C_INCLUDE_PATH := $(BREW_PREFIX)/include
-	LIBRARY_PATH := $(BREW_PREFIX)/lib
-	LIBRARIES := 	-lstdc++ \
-		-lglfw -lglew -framework CoreVideo -framework OpenGL -framework GLUT \
+	BREW_PREFIX    := $(shell brew --prefix)
+	C_INCLUDE_PATH := -I $(BREW_PREFIX)/include/ -I $(BREW_PREFIX)/include/bullet/
+	LIBRARY_PATH   := -L $(BREW_PREFIX)/lib
+	LIBRARIES      := -lLinearMath -lBulletDynamics -lBulletCollision	\
+		-lglfw -lglew -lstdc++ \
+		-framework CoreVideo -framework OpenGL -framework GLUT \
 		-framework IOKit -framework Cocoa -framework Carbon
 else
 	LIBRARIES := -lstdc++ -lGL -lGLEW -lglfw -lm -lcglm
@@ -19,7 +21,7 @@ TARGET := esport-$(ARCH)-$(OS).app
 
 $(TARGET):
 	mkdir -p ./obj
-	g++ -c src/physics.cpp -o ./obj/physics.o
+	g++ -c src/physics.cpp -o ./obj/physics.o $(C_INCLUDE_PATH) $(LIBRARY_PATH) $(LIBRARIES)
 
 	gcc -g \
 		src/objloader.c \
@@ -28,8 +30,8 @@ $(TARGET):
 		obj/physics.o \
 		-o $(TARGET) \
 		-DGL_SILENCE_DEPRECATION \
-		-I$(C_INCLUDE_PATH) \
-		-L$(LIBRARY_PATH) $(LIBRARIES)
+		$(C_INCLUDE_PATH) \
+		$(LIBRARY_PATH) $(LIBRARIES)
 
 clean:
 	rm -f tmp/*.o
