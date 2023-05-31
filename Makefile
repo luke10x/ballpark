@@ -11,7 +11,9 @@ ifeq ($(shell uname), Darwin)
 		-framework CoreVideo -framework OpenGL -framework GLUT \
 		-framework IOKit -framework Cocoa -framework Carbon
 else
-	LIBRARIES := -lstdc++ -lGL -lGLEW -lglfw -lm -lcglm
+	C_INCLUDE_PATH := -I /usr/include/bullet/
+	LIBRARIES      := -lstdc++ -lGL -lGLEW -lglfw -lm -lcglm \
+		-lLinearMath -lBulletDynamics -lBulletCollision
 endif
 
 ARCH := $(shell uname -m)

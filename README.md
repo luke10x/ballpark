@@ -36,7 +36,8 @@ Libraries need to be installed:
     sudo apt install \
         build-essential git blender imagemagick \
         libcglm-dev libglew-dev libglfw3-dev freeglut3-dev \
-        mesa-common-dev libglu1-mesa-dev
+        mesa-common-dev libglu1-mesa-dev \
+	libbullet-dev
 
 ## Running
 
