@@ -2,9 +2,14 @@
 # WASM build
 #
 
+CPPFLAGS += -I/emsdk/upstream/emscripten/cache/sysroot/include/bullet
+LDFLAGS += -L/emsdk/upstream/emscripten/cache/sysroot/lib
+LDLIBS += -lLinearMath -lBulletDynamics -lBulletCollision
+
 build:
+
 	mkdir -p ../obj
-	em++ -c ../src/physics.cpp -o ../obj/physics.bc.o
+	em++ -c ../src/physics.cpp -o ../obj/physics.bc.o $(CPPFLAGS)
 
 	mkdir -p ./build
 	emcc \
@@ -13,6 +18,7 @@ build:
 		../src/texture.c ../src/shader.c ../src/esport.c \
 		../obj/physics.bc.o \
 		-o ./build/index.html \
+		$(LDFLAGS) $(LDLIBS) \
 		-s FULL_ES2=1 -s USE_GLFW=3 -s USE_WEBGL2=1 -O0 \
 		-s ALLOW_MEMORY_GROWTH=1 -s GL_UNSAFE_OPTS=0 \
 		-s ASSERTIONS=1 -s SAFE_HEAP=1 \

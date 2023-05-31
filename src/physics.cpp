@@ -1,6 +1,6 @@
 #include <iostream>
 // #include <bullet/btBulletDynamicsCommon.h>
-#include <btBulletDynamicsCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 #include "physics.h"
 
@@ -22,7 +22,7 @@ void physics_init() {
     // Set gravity
     dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
-    std::string message = "PHYSICS WORLD INITIALIZED!";
+    std::string message = "PHYSICS WORLD INITIALIZED FINALLY!";
     std::cout << message << std::endl;
 }
 
